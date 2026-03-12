@@ -1,710 +1,816 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orçamento Familiar Mensal</title>
-  <style>
-    :root{
-      --bg:#f3f5f7;
-      --card:#ffffff;
-      --line:#d8dee5;
-      --text:#24323f;
-      --muted:#64707d;
-      --accent:#0d7ea2;
-      --accent2:#d86d09;
-      --ok:#e8f3ec;
-      --danger:#fff0f0;
-      --warn:#fff6df;
-      --shadow:0 6px 18px rgba(0,0,0,.06);
-      --radius:14px;
-    }
-
-    *{box-sizing:border-box}
-    html, body{
-      margin:0;
-      padding:0;
-      width:100%;
-      overflow-x:hidden;
-    }
-
-    body{
-      font-family:Arial,Helvetica,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      font-size:14px;
-      line-height:1.35;
-    }
-
-    .wrap{
-      width:100%;
-      max-width:760px;
-      margin:0 auto;
-      padding:10px;
-    }
-
-    h1{
-      margin:0;
-      color:var(--accent);
-      font-size:26px;
-      line-height:1.15;
-    }
-
-    .sub{
-      margin:4px 0 0;
-      color:#5d6e1d;
-      font-weight:700;
-      font-size:13px;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:minmax(0,1fr);
-      gap:12px;
-      margin-top:12px;
-      width:100%;
-    }
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:12px;
-      width:100%;
-      max-width:100%;
-      min-width:0;
-      overflow:hidden;
-    }
-
-    .section-title{
-      margin:0 0 8px;
-      font-size:16px;
-      line-height:1.2;
-    }
-
-    label{
-      display:block;
-      font-weight:700;
-      margin:8px 0 4px;
-      font-size:13px;
-    }
-
-    input,button,select{
-      font:inherit;
-    }
-
-    input[type="month"],
-    input[type="text"],
-    input[type="number"],
-    select{
-      width:100%;
-      max-width:100%;
-      min-width:0;
-      padding:9px 10px;
-      border:1px solid #c9d4de;
-      border-radius:10px;
-      background:#fff;
-      color:var(--text);
-      min-height:40px;
-      display:block;
-    }
-
-    .month-inline{
-      display:flex;
-      align-items:flex-end;
-      gap:8px;
-      width:100%;
-      max-width:220px;
-    }
-
-    .month-field{
-      flex:1 1 auto;
-      min-width:0;
-    }
-
-    .ok-btn{
-      width:54px;
-      min-width:54px;
-      padding:0 10px;
-      flex:0 0 54px;
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-
-    .detail-two-cols{
-      display:flex;
-      gap:8px;
-      width:100%;
-      margin-top:8px;
-    }
-
-    .detail-col{
-      flex:1 1 0;
-      min-width:0;
-      width:50%;
-      overflow:hidden;
-    }
-
-    .detail-col input{
-      width:100%;
-      max-width:100%;
-      min-width:0;
-      margin:0;
-      display:block;
-    }
-
-    .btns{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:8px;
-      margin-top:10px;
-      width:100%;
-    }
-
-    button{
-      border:none;
-      border-radius:10px;
-      padding:11px 12px;
-      font-weight:700;
-      cursor:pointer;
-      -webkit-appearance:none;
-      appearance:none;
-      touch-action:manipulation;
-      min-height:42px;
-      width:100%;
-      max-width:100%;
-    }
-
-    .btn-small{
-      width:auto;
-      min-width:0;
-      padding:0 12px;
-      min-height:38px;
-    }
-
-    .primary{background:var(--accent);color:#fff}
-    .secondary{background:#eef4f7;color:var(--text);border:1px solid #d8e5ec}
-    .outline{background:#fff;border:1px solid #c8d3db}
-    .danger{background:var(--danger);color:#8f3131;border:1px solid #efcaca}
-    .warn{background:var(--warn);color:#8a6500;border:1px solid #ead9aa}
-
-    .tiny{
-      font-size:11px;
-      color:var(--muted);
-      line-height:1.35;
-    }
-
-    .muted{color:var(--muted)}
-
-    .collapsible{
-      border:1px solid var(--line);
-      border-radius:12px;
-      overflow:hidden;
-      background:#fbfcfd;
-      margin-top:10px;
-      width:100%;
-      max-width:100%;
-      min-width:0;
-    }
-
-    .collapsible.hidden{display:none}
-    .hidden{display:none !important}
-
-    .hint{
-      margin-top:8px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.35;
-    }
-
-    .flash{animation:flash .5s ease 1}
-    @keyframes flash{
-      0%{transform:scale(1)}
-      50%{transform:scale(1.01);box-shadow:0 0 0 3px rgba(13,126,162,.12)}
-      100%{transform:scale(1)}
-    }
-
-    .collapsible .body{padding:10px}
-
-    .launch-list,.done-list{
-      display:grid;
-      gap:8px;
-      width:100%;
-    }
-
-    .expense-btn{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding:10px;
-      border:1px solid #dbe6ee;
-      background:#fff;
-      border-radius:10px;
-      cursor:pointer;
-      width:100%;
-      max-width:100%;
-      text-align:left;
-      min-width:0;
-    }
-
-    .expense-btn:hover{background:#f2f8fb}
-
-    .badge{
-      display:inline-block;
-      padding:3px 7px;
-      border-radius:999px;
-      font-size:11px;
-      font-weight:700;
-      background:#eef4f7;
-      color:#4a5f70;
-      white-space:nowrap;
-      flex:0 0 auto;
-    }
-
-    .badge.ok{
-      background:var(--ok);
-      color:#3e6b4f;
-    }
-
-    .table-wrap{
-      width:100%;
-      max-width:100%;
-      overflow-x:hidden;
-      border:1px solid #dbe5ec;
-      border-radius:12px;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      table-layout:fixed;
-      font-size:10px;
-    }
-
-    th,td{
-      padding:6px 4px;
-      border-bottom:1px solid #dbe5ec;
-      text-align:right;
-      white-space:normal;
-      word-break:break-word;
-      overflow-wrap:anywhere;
-      vertical-align:top;
-      line-height:1.15;
-    }
-
-    th:first-child,td:first-child{
-      text-align:left;
-      width:34%;
-    }
-
-    thead th{
-      color:#7a3f00;
-      background:#fafcfe;
-    }
-
-    .thead-main{
-      font-size:12px;
-      color:var(--accent2);
-    }
-
-    tbody tr:nth-child(odd){background:#f7fcff}
-    tfoot td{
-      font-weight:800;
-      background:#eff7fb;
-    }
-
-    .editor-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-start;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .shares{
-      margin-top:10px;
-      border:1px solid #dbe5ec;
-      border-radius:12px;
-      padding:10px;
-      background:#fff;
-      width:100%;
-      max-width:100%;
-      min-width:0;
-    }
-
-    .share-row{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 92px 26px;
-      gap:6px;
-      align-items:center;
-      margin-bottom:8px;
-      min-width:0;
-    }
-
-    .share-row:last-child{margin-bottom:0}
-
-    .share-row label{
-      margin:0;
-      font-size:13px;
-      font-weight:700;
-      min-width:0;
-    }
-
-    .share-row input[type="text"]{
-      padding:8px 6px;
-      min-height:36px;
-      min-width:0;
-      text-align:right;
-    }
-
-    .people-row{
-      display:grid;
-      grid-template-columns:minmax(0,1fr) 78px;
-      gap:8px;
-      align-items:center;
-      margin-bottom:8px;
-    }
-
-    .people-row:last-child{margin-bottom:0}
-
-    .declared-row{
-      display:grid;
-      grid-template-columns:minmax(0,1.1fr) 92px 92px;
-      gap:8px;
-      align-items:center;
-      margin-bottom:8px;
-    }
-
-    .declared-row:last-child{margin-bottom:0}
-
-    .declared-head{
-      display:grid;
-      grid-template-columns:minmax(0,1.1fr) 92px 92px;
-      gap:8px;
-      font-size:11px;
-      font-weight:700;
-      color:var(--muted);
-      margin-bottom:6px;
-    }
-
-    .declared-row input{
-      text-align:right;
-    }
-
-    .total-check{
-      margin-top:8px;
-      font-weight:700;
-      font-size:12px;
-    }
-
-    .oktext{color:#2b7a43}
-    .badtext{color:#b04444}
-
-    .detail-table{
-      width:100%;
-      min-width:0;
-      font-size:12px;
-      table-layout:auto;
-    }
-
-    .detail-table th,.detail-table td{
-      font-size:12px;
-      padding:7px 6px;
-      white-space:normal;
-    }
-
-    .pill{
-      display:inline-block;
-      padding:3px 8px;
-      border-radius:999px;
-      font-size:10px;
-      font-weight:700;
-      background:#eef4f7;
-      color:#4a5f70;
-      white-space:normal;
-    }
-
-    .footer-note{
-      margin-top:10px;
-      font-size:11px;
-      color:var(--muted);
-      line-height:1.35;
-    }
-
-    hr{
-      border:none;
-      border-top:1px solid var(--line);
-      margin:14px 0;
-    }
-
-    .person-chip{
-      display:inline-block;
-      background:#eef4f7;
-      border:1px solid #d9e4ec;
-      border-radius:999px;
-      padding:4px 8px;
-      font-size:11px;
-      margin:0 6px 6px 0;
-    }
-
-    @media (min-width:700px){
-      .wrap{
-        max-width:1100px;
-        padding:16px;
-      }
-
-      h1{font-size:34px}
-
-      .grid{
-        grid-template-columns:minmax(0,320px) minmax(0,1fr);
-        gap:16px;
-      }
-
-      .btns{
-        grid-template-columns:repeat(2,minmax(0,1fr));
-      }
-
-      table{
-        font-size:12px;
-      }
-
-      th,td{
-        padding:8px 8px;
-        line-height:1.2;
-      }
-
-      .thead-main{
-        font-size:14px;
-      }
-
-      .pill{
-        font-size:11px;
-        white-space:nowrap;
-      }
-    }
-
-    @media print{
-      body{background:#fff}
-      .no-print{display:none !important}
-      .wrap{max-width:none;padding:0}
-      .grid{grid-template-columns:1fr}
-      .card{box-shadow:none}
-      .table-wrap{overflow:visible;border:none}
-      table{
-        min-width:0;
-        width:100%;
-        font-size:10px;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Orçamento Familiar Mensal</title>
+<style>
+:root{
+--bg:#f3f5f7;
+--card:#ffffff;
+--line:#d8dee5;
+--text:#24323f;
+--muted:#64707d;
+--accent:#0d7ea2;
+--accent2:#d86d09;
+--ok:#e8f3ec;
+--danger:#fff0f0;
+--warn:#fff6df;
+--shadow:0 6px 18px rgba(0,0,0,.06);
+--radius:14px;
+}
+
+*{box-sizing:border-box}
+html, body{
+margin:0;
+padding:0;
+width:100%;
+overflow-x:hidden;
+}
+
+body{
+font-family:Arial,Helvetica,sans-serif;
+background:var(--bg);
+color:var(--text);
+font-size:14px;
+line-height:1.35;
+}
+
+.wrap{
+width:100%;
+max-width:760px;
+margin:0 auto;
+padding:10px;
+}
+
+h1{
+margin:0;
+color:var(--accent);
+font-size:26px;
+line-height:1.15;
+}
+
+.sub{
+margin:4px 0 0;
+color:#5d6e1d;
+font-weight:700;
+font-size:13px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:minmax(0,1fr);
+gap:12px;
+margin-top:12px;
+width:100%;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--line);
+border-radius:var(--radius);
+box-shadow:var(--shadow);
+padding:12px;
+width:100%;
+max-width:100%;
+min-width:0;
+overflow:hidden;
+}
+
+.section-title{
+margin:0 0 8px;
+font-size:16px;
+line-height:1.2;
+}
+
+label{
+display:block;
+font-weight:700;
+margin:8px 0 4px;
+font-size:13px;
+}
+
+input,button,select{
+font:inherit;
+}
+
+input[type="month"],
+input[type="text"],
+input[type="number"],
+select{
+width:100%;
+max-width:100%;
+min-width:0;
+padding:9px 10px;
+border:1px solid #c9d4de;
+border-radius:10px;
+background:#fff;
+color:var(--text);
+min-height:40px;
+display:block;
+}
+
+.month-inline{
+display:flex;
+align-items:flex-end;
+gap:8px;
+width:100%;
+max-width:220px;
+}
+
+.month-field{
+flex:1 1 auto;
+min-width:0;
+}
+
+.ok-btn{
+width:54px;
+min-width:54px;
+padding:0 10px;
+flex:0 0 54px;
+}
+
+.row{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+}
+
+.detail-two-cols{
+display:flex;
+gap:8px;
+width:100%;
+margin-top:8px;
+}
+
+.detail-col{
+flex:1 1 0;
+min-width:0;
+width:50%;
+overflow:hidden;
+}
+
+.detail-col input{
+width:100%;
+max-width:100%;
+min-width:0;
+margin:0;
+display:block;
+}
+
+.btns{
+display:grid;
+grid-template-columns:1fr;
+gap:8px;
+margin-top:10px;
+width:100%;
+}
+
+button{
+border:none;
+border-radius:10px;
+padding:11px 12px;
+font-weight:700;
+cursor:pointer;
+-webkit-appearance:none;
+appearance:none;
+touch-action:manipulation;
+min-height:42px;
+width:100%;
+max-width:100%;
+}
+
+.btn-small{
+width:auto;
+min-width:0;
+padding:0 12px;
+min-height:38px;
+}
+
+.primary{background:var(--accent);color:#fff}
+.secondary{background:#eef4f7;color:var(--text);border:1px solid #d8e5ec}
+.outline{background:#fff;border:1px solid #c8d3db}
+.danger{background:var(--danger);color:#8f3131;border:1px solid #efcaca}
+.warn{background:var(--warn);color:#8a6500;border:1px solid #ead9aa}
+
+.tiny{
+font-size:11px;
+color:var(--muted);
+line-height:1.35;
+}
+
+.muted{color:var(--muted)}
+
+.collapsible{
+border:1px solid var(--line);
+border-radius:12px;
+overflow:hidden;
+background:#fbfcfd;
+margin-top:10px;
+width:100%;
+max-width:100%;
+min-width:0;
+}
+
+.collapsible.hidden{display:none}
+.hidden{display:none !important}
+
+.hint{
+margin-top:8px;
+font-size:12px;
+color:var(--muted);
+line-height:1.35;
+}
+
+.flash{animation:flash .5s ease 1}
+@keyframes flash{
+0%{transform:scale(1)}
+50%{transform:scale(1.01);box-shadow:0 0 0 3px rgba(13,126,162,.12)}
+100%{transform:scale(1)}
+}
+
+.collapsible .body{padding:10px}
+
+.launch-list,.done-list{
+display:grid;
+gap:8px;
+width:100%;
+}
+
+.expense-btn{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+padding:10px;
+border:1px solid #dbe6ee;
+background:#fff;
+border-radius:10px;
+cursor:pointer;
+width:100%;
+max-width:100%;
+text-align:left;
+min-width:0;
+}
+
+.expense-btn:hover{background:#f2f8fb}
+
+.badge{
+display:inline-block;
+padding:3px 7px;
+border-radius:999px;
+font-size:11px;
+font-weight:700;
+background:#eef4f7;
+color:#4a5f70;
+white-space:nowrap;
+flex:0 0 auto;
+}
+
+.badge.ok{
+background:var(--ok);
+color:#3e6b4f;
+}
+
+.table-wrap{
+width:100%;
+max-width:100%;
+overflow-x:hidden;
+border:1px solid #dbe5ec;
+border-radius:12px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+table-layout:fixed;
+font-size:10px;
+}
+
+th,td{
+padding:6px 4px;
+border-bottom:1px solid #dbe5ec;
+text-align:right;
+white-space:normal;
+word-break:break-word;
+overflow-wrap:anywhere;
+vertical-align:top;
+line-height:1.15;
+}
+
+th:first-child,td:first-child{
+text-align:left;
+width:34%;
+}
+
+thead th{
+color:#7a3f00;
+background:#fafcfe;
+}
+
+.thead-main{
+font-size:12px;
+color:var(--accent2);
+}
+
+tbody tr:nth-child(odd){background:#f7fcff}
+tfoot td{
+font-weight:800;
+background:#eff7fb;
+}
+
+.editor-head{
+display:flex;
+justify-content:space-between;
+align-items:flex-start;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.shares{
+margin-top:10px;
+border:1px solid #dbe5ec;
+border-radius:12px;
+padding:10px;
+background:#fff;
+width:100%;
+max-width:100%;
+min-width:0;
+}
+
+.share-row{
+display:grid;
+grid-template-columns:minmax(0,1fr) 92px 26px;
+gap:6px;
+align-items:center;
+margin-bottom:8px;
+min-width:0;
+}
+
+.share-row:last-child{margin-bottom:0}
+
+.share-row label{
+margin:0;
+font-size:13px;
+font-weight:700;
+min-width:0;
+}
+
+.share-row input[type="text"]{
+padding:8px 6px;
+min-height:36px;
+min-width:0;
+text-align:right;
+}
+
+.people-row{
+display:grid;
+grid-template-columns:minmax(0,1fr) 78px;
+gap:8px;
+align-items:center;
+margin-bottom:8px;
+}
+
+.people-row:last-child{margin-bottom:0}
+
+.declared-row{
+display:grid;
+grid-template-columns:minmax(0,1.1fr) 92px 92px;
+gap:8px;
+align-items:center;
+margin-bottom:8px;
+}
+
+.declared-row:last-child{margin-bottom:0}
+
+.declared-head{
+display:grid;
+grid-template-columns:minmax(0,1.1fr) 92px 92px;
+gap:8px;
+font-size:11px;
+font-weight:700;
+color:var(--muted);
+margin-bottom:6px;
+}
+
+.declared-row input{
+text-align:right;
+}
+
+.total-check{
+margin-top:8px;
+font-weight:700;
+font-size:12px;
+}
+
+.oktext{color:#2b7a43}
+.badtext{color:#b04444}
+
+.detail-table{
+width:100%;
+min-width:0;
+font-size:12px;
+table-layout:auto;
+}
+
+.detail-table th,.detail-table td{
+font-size:12px;
+padding:7px 6px;
+white-space:normal;
+}
+
+.pill{
+display:inline-block;
+padding:3px 8px;
+border-radius:999px;
+font-size:10px;
+font-weight:700;
+background:#eef4f7;
+color:#4a5f70;
+white-space:normal;
+}
+
+.footer-note{
+margin-top:10px;
+font-size:11px;
+color:var(--muted);
+line-height:1.35;
+}
+
+hr{
+border:none;
+border-top:1px solid var(--line);
+margin:14px 0;
+}
+
+.person-chip{
+display:inline-block;
+background:#eef4f7;
+border:1px solid #d9e4ec;
+border-radius:999px;
+padding:4px 8px;
+font-size:11px;
+margin:0 6px 6px 0;
+}
+
+.chart-wrap{
+width:100%;
+overflow:hidden;
+border:1px solid #dbe5ec;
+border-radius:12px;
+background:#fff;
+padding:6px;
+}
+
+.chart-canvas-box{
+width:100%;
+min-width:0;
+height:200px;
+position:relative;
+}
+
+#historyChart{
+width:100%;
+height:100%;
+display:block;
+}
+
+.chart-legend{
+display:flex;
+flex-wrap:wrap;
+gap:4px 8px;
+margin-top:6px;
+}
+
+.chart-legend-item{
+display:flex;
+align-items:center;
+gap:5px;
+font-size:10px;
+color:var(--text);
+}
+
+.chart-legend-color{
+width:10px;
+height:10px;
+border-radius:999px;
+border:1px solid rgba(0,0,0,.15);
+flex:0 0 10px;
+}
+
+.chart-empty{
+font-size:11px;
+color:var(--muted);
+padding:6px 0 0;
+}
+
+@media (min-width:700px){
+.wrap{
+max-width:1100px;
+padding:16px;
+}
+
+h1{font-size:34px}
+
+.grid{
+grid-template-columns:minmax(0,320px) minmax(0,1fr);
+gap:16px;
+}
+
+.btns{
+grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+table{
+font-size:12px;
+}
+
+th,td{
+padding:8px 8px;
+line-height:1.2;
+}
+
+.thead-main{
+font-size:14px;
+}
+
+.pill{
+font-size:11px;
+white-space:nowrap;
+}
+
+.chart-canvas-box{
+height:220px;
+}
+}
+
+@media print{
+body{background:#fff}
+.no-print{display:none !important}
+.wrap{max-width:none;padding:0}
+.grid{grid-template-columns:1fr}
+.card{box-shadow:none}
+.table-wrap{overflow:visible;border:none}
+table{
+min-width:0;
+width:100%;
+font-size:10px;
+}
+}
+</style>
 </head>
 <body>
 <div class="wrap">
-  <div class="no-print">
-    <h1>Orçamento Familiar</h1>
-    <div class="sub">Lançamento mensal de despesas, rateio automático, histórico e PDF</div>
-  </div>
+<div class="no-print">
+<h1>Orçamento Familiar</h1>
+<div class="sub">Lançamento mensal de despesas, rateio automático, histórico e PDF</div>
+</div>
 
-  <div class="card no-print" id="startCard" style="margin-top:12px;">
-    <h2 class="section-title">Menu inicial</h2>
+<div class="card no-print" id="startCard" style="margin-top:12px;">
+<h2 class="section-title">Menu inicial</h2>
 
-    <label for="budgetMonth">Mês Referência</label>
-    <div class="month-inline">
-      <input class="month-field" type="month" id="budgetMonth">
-      <button class="primary ok-btn" type="button" id="btnOpenMonth">OK</button>
-    </div>
+<label for="budgetMonth">Mês Referência</label>
+<div class="month-inline">
+<input class="month-field" type="month" id="budgetMonth">
+<button class="primary ok-btn" type="button" id="btnOpenMonth">OK</button>
+</div>
 
-    <div class="tiny" style="margin-top:8px">
-      Se o mês já existir, ele será carregado. Se não existir, será criado um novo lançamento vazio.
-    </div>
+<div class="tiny" style="margin-top:8px">
+Se o mês já existir, ele será carregado. Se não existir, será criado um novo lançamento vazio.
+</div>
 
-    <div style="margin-top:14px">
-      <strong style="font-size:13px;">Meses já guardados</strong>
-      <div class="tiny">Toque num mês salvo para o abrir diretamente.</div>
-      <div id="savedMonths" style="margin-top:8px"></div>
-    </div>
-  </div>
+<div style="margin-top:14px">
+<strong style="font-size:13px;">Meses já guardados</strong>
+<div class="tiny">Toque num mês salvo para o abrir diretamente.</div>
+<div id="savedMonths" style="margin-top:8px"></div>
+</div>
+</div>
 
-  <div class="grid hidden" id="mainArea">
-    <aside class="card no-print">
-      <h2 class="section-title">Mês aberto</h2>
+<div class="grid hidden" id="mainArea">
+<aside class="card no-print">
+<h2 class="section-title">Mês aberto</h2>
 
-      <label for="budgetTitle">Título exibido</label>
-      <input type="text" id="budgetTitle" placeholder="Ex.: Jan 2026">
+<label for="budgetTitle">Título exibido</label>
+<input type="text" id="budgetTitle" placeholder="Ex.: Jan 2026">
 
-      <div class="btns">
-        <button class="secondary" type="button" id="btnSave">Salvar agora</button>
-        <button class="secondary" type="button" id="btnEditPeople">Editar nomes</button>
-      </div>
+<div class="btns">
+<button class="secondary" type="button" id="btnSave">Salvar agora</button>
+<button class="secondary" type="button" id="btnEditPeople">Editar nomes</button>
+</div>
 
-      <div class="tiny" id="peoplePreview" style="margin-top:8px"></div>
+<div class="tiny" id="peoplePreview" style="margin-top:8px"></div>
 
-      <div id="peoplePanel" class="collapsible hidden">
-        <div class="body">
-          <strong>Pessoas do rateio</strong>
-          <div class="tiny" style="margin-top:6px">
-            Pode renomear, apagar e adicionar novas pessoas. As alterações ficam guardadas para os próximos meses.
-          </div>
+<div id="peoplePanel" class="collapsible hidden">
+<div class="body">
+<strong>Pessoas do rateio</strong>
+<div class="tiny" style="margin-top:6px">
+Pode renomear, apagar e adicionar novas pessoas. As alterações ficam guardadas para os próximos meses.
+</div>
 
-          <div id="peopleListBox" style="margin-top:10px"></div>
+<div id="peopleListBox" style="margin-top:10px"></div>
 
-          <div class="row" style="margin-top:10px">
-            <div style="grid-column:1 / -1;">
-              <label for="newPersonName">Novo nome</label>
-              <input type="text" id="newPersonName" placeholder="Ex.: João">
-            </div>
-          </div>
+<div class="row" style="margin-top:10px">
+<div style="grid-column:1 / -1;">
+<label for="newPersonName">Novo nome</label>
+<input type="text" id="newPersonName" placeholder="Ex.: João">
+</div>
+</div>
 
-          <div class="btns">
-            <button class="secondary" type="button" id="btnAddPerson">Adicionar pessoa</button>
-            <button class="primary" type="button" id="btnSavePeople">Guardar nomes</button>
-          </div>
-        </div>
-      </div>
+<div class="btns">
+<button class="secondary" type="button" id="btnAddPerson">Adicionar pessoa</button>
+<button class="primary" type="button" id="btnSavePeople">Guardar nomes</button>
+</div>
+</div>
+</div>
 
-      <hr>
+<hr>
 
-      <h2 class="section-title">Lançamentos do mês</h2>
-      <button type="button" class="primary" id="btnLaunchExpense">Lançar Despesa</button>
-      <div id="launchHint" class="hint">Toque em “Lançar Despesa” para ver apenas as despesas pendentes.</div>
+<h2 class="section-title">Lançamentos do mês</h2>
+<div class="btns">
+<button type="button" class="primary" id="btnLaunchExpense">Lançar Despesa</button>
+<button type="button" class="secondary" id="btnShowCustomExpensePanel">Nova despesa personalizada</button>
+</div>
 
-      <div id="launchPanel" class="collapsible hidden">
-        <div class="body">
-          <div class="tiny" style="margin-bottom:8px">Somente despesas ainda não lançadas aparecem aqui.</div>
-          <div id="launchList" class="launch-list"></div>
-        </div>
-      </div>
+<div id="launchHint" class="hint">Toque em “Lançar Despesa” para ver apenas as despesas pendentes.</div>
 
-      <div id="mobileStatus" class="hint"></div>
+<div id="launchPanel" class="collapsible hidden">
+<div class="body">
+<div class="tiny" style="margin-bottom:8px">Somente despesas ainda não lançadas aparecem aqui.</div>
+<div id="launchList" class="launch-list"></div>
+</div>
+</div>
 
-      <div id="editorPanel" class="collapsible hidden">
-        <div class="body">
-          <div class="editor-head">
-            <strong id="editorTitle">Despesa</strong>
-            <span class="badge" id="editorPresetLabel">Rateio</span>
-          </div>
+<div id="customExpensePanel" class="collapsible hidden">
+<div class="body">
+<strong>Nova despesa personalizada</strong>
 
-          <label for="expenseValue">Valor total (£)</label>
-          <input type="text" id="expenseValue" inputmode="decimal" placeholder="0.00" onblur="formatDecimalField(this, 2)">
+<label for="customExpenseName">Nome da despesa</label>
+<input type="text" id="customExpenseName" placeholder="Ex.: Água, Spotify, Farmácia">
 
-          <div class="btns" id="presetButtons">
-            <button class="secondary" type="button" id="btnPresetMembers">Por membros iguais</button>
-            <button class="outline" type="button" id="btnPresetZero">Zerar rateio</button>
-          </div>
+<label for="customExpensePreset">Rateio inicial</label>
+<select id="customExpensePreset">
+<option value="members">Por membros iguais</option>
+<option value="custom">Rateio editável</option>
+</select>
 
-          <div class="shares" id="sharesPanel">
-            <div class="tiny" style="margin-bottom:8px">
-              Defina quem participa e o percentual de rateio. Ao marcar ou desmarcar, o sistema redistribui automaticamente para fechar em 100%. Os valores continuam editáveis.
-            </div>
-            <div id="sharesBox"></div>
-            <div class="total-check" id="sharesTotalCheck"></div>
-          </div>
+<label for="customExpenseDetailMode">Tipo de detalhamento</label>
+<select id="customExpenseDetailMode">
+<option value="none">Sem detalhamento</option>
+<option value="supermarket">Lista de compras / itens</option>
+<option value="category4">4 categorias editáveis</option>
+</select>
 
-          <div id="detailBox" style="margin-top:12px;display:none">
-            <label>Detalhamento desta despesa</label>
-            <div id="detailDynamicForm"></div>
+<div id="customCategoryNamesBox" class="hidden">
+<label for="customCategory1">Categoria 1</label>
+<input type="text" id="customCategory1" placeholder="Ex.: Parcela 1">
+<label for="customCategory2">Categoria 2</label>
+<input type="text" id="customCategory2" placeholder="Ex.: Parcela 2">
+<label for="customCategory3">Categoria 3</label>
+<input type="text" id="customCategory3" placeholder="Ex.: Parcela 3">
+<label for="customCategory4">Categoria 4</label>
+<input type="text" id="customCategory4" placeholder="Ex.: Outros">
+</div>
 
-            <div class="btns">
-              <button class="secondary" type="button" id="btnAddDetail">Adicionar item</button>
-            </div>
+<div class="btns">
+<button type="button" class="primary" id="btnCreateCustomExpense">Criar despesa</button>
+<button type="button" class="outline" id="btnCancelCustomExpense">Cancelar</button>
+</div>
+</div>
+</div>
 
-            <div id="detailList"></div>
-          </div>
+<div id="mobileStatus" class="hint"></div>
 
-          <div class="btns">
-            <button class="primary" type="button" id="btnApplyExpense">Guardar lançamento</button>
-            <button class="outline" type="button" id="btnCancelExpense">Cancelar</button>
-          </div>
-        </div>
-      </div>
+<div id="editorPanel" class="collapsible hidden">
+<div class="body">
+<div class="editor-head">
+<strong id="editorTitle">Despesa</strong>
+<span class="badge" id="editorPresetLabel">Rateio</span>
+</div>
 
-      <div style="margin-top:14px">
-        <strong style="font-size:13px;">Já lançadas</strong>
-        <div id="doneList" class="done-list" style="margin-top:8px"></div>
-      </div>
+<label for="expenseValue">Valor total (£)</label>
+<input type="text" id="expenseValue" inputmode="decimal" placeholder="0.00" onblur="formatDecimalField(this, 2)">
 
-      <div class="btns" style="margin-top:14px">
-        <button class="secondary" type="button" id="btnPrint">Exportar PDF</button>
-        <button class="danger" type="button" id="btnDeleteMonth">Apagar mês</button>
-      </div>
-      <div class="footer-note">Na impressão do navegador, escolha “Salvar como PDF”.</div>
-    </aside>
+<div class="btns" id="presetButtons">
+<button class="secondary" type="button" id="btnPresetMembers">Por membros iguais</button>
+<button class="outline" type="button" id="btnPresetZero">Zerar rateio</button>
+</div>
 
-    <main>
-      <section class="card">
-        <div style="display:flex;justify-content:space-between;align-items:end;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-          <div>
-            <h2 id="reportTitle" style="margin:0;color:var(--accent);font-size:24px;line-height:1.15;">Orçamento Familiar</h2>
-            <div id="reportMonthLabel" class="sub">Nenhum mês selecionado</div>
-          </div>
-          <div class="tiny">A tabela é montada automaticamente.</div>
-        </div>
+<div class="shares" id="sharesPanel">
+<div class="tiny" style="margin-bottom:8px">
+Defina quem participa e o percentual de rateio. Ao marcar ou desmarcar, o sistema redistribui automaticamente para fechar em 100%. Os valores continuam editáveis.
+</div>
+<div id="sharesBox"></div>
+<div class="total-check" id="sharesTotalCheck"></div>
+</div>
 
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr id="budgetHeadRow"></tr>
-            </thead>
-            <tbody id="budgetBody"></tbody>
-            <tfoot>
-              <tr id="budgetFootRow"></tr>
-            </tfoot>
-          </table>
-        </div>
-      </section>
+<div id="detailBox" style="margin-top:12px;display:none">
+<label>Detalhamento desta despesa</label>
+<div id="detailDynamicForm"></div>
 
-      <section class="card">
-        <h2 class="section-title">Detalhamento de despesas variáveis</h2>
-        <div id="detailsPanels"></div>
-      </section>
-    </main>
-  </div>
+<div class="btns">
+<button class="secondary" type="button" id="btnAddDetail">Adicionar item</button>
+</div>
+
+<div id="detailList"></div>
+</div>
+
+<div class="btns" id="editorBottomBtns">
+<button class="primary" type="button" id="btnApplyExpense">Guardar lançamento</button>
+<button class="outline" type="button" id="btnCancelExpense">Cancelar</button>
+<button class="danger hidden" type="button" id="btnDeleteCustomExpense">Apagar despesa personalizada</button>
+</div>
+</div>
+</div>
+
+<div style="margin-top:14px">
+<strong style="font-size:13px;">Já lançadas</strong>
+<div id="doneList" class="done-list" style="margin-top:8px"></div>
+</div>
+
+<div class="btns" style="margin-top:14px">
+<button class="secondary" type="button" id="btnPrint">Exportar PDF</button>
+<button class="danger" type="button" id="btnDeleteMonth">Apagar mês</button>
+</div>
+<div class="footer-note">Na impressão do navegador, escolha “Salvar como PDF”.</div>
+</aside>
+
+<main>
+<section class="card">
+<div style="display:flex;justify-content:space-between;align-items:end;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+<div>
+<h2 id="reportTitle" style="margin:0;color:var(--accent);font-size:24px;line-height:1.15;">Orçamento Familiar</h2>
+<div id="reportMonthLabel" class="sub">Nenhum mês selecionado</div>
+</div>
+<div class="tiny">A tabela é montada automaticamente.</div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr id="budgetHeadRow"></tr>
+</thead>
+<tbody id="budgetBody"></tbody>
+<tfoot>
+<tr id="budgetFootRow"></tr>
+</tfoot>
+</table>
+</div>
+</section>
+
+<section class="card no-print">
+<h2 class="section-title">Evolução mensal por pessoa</h2>
+<div class="tiny">Gráfico de linha com o total gasto por pessoa em cada mês salvo.</div>
+
+<div class="chart-wrap" style="margin-top:10px;">
+<div class="chart-canvas-box">
+<canvas id="historyChart"></canvas>
+</div>
+<div id="historyLegend" class="chart-legend"></div>
+<div id="historyChartEmpty" class="chart-empty hidden"></div>
+</div>
+</section>
+
+<section class="card">
+<h2 class="section-title">Detalhamento de despesas variáveis</h2>
+<div id="detailsPanels"></div>
+</section>
+</main>
+</div>
 </div>
 
 <script>
 const DEFAULT_MEMBERS = ['Elias','Flavio','Flora','Ianna'];
 
 const DETAIL_PRESETS = {
-  finance_car: ['DVLA','Admiral Insurance','Blue Motor Finance','Outros'],
-  pet_plan: ['Animal Health Maya','Animal Health Niko','Pet Plan','Outros']
+finance_car: ['DVLA','Admiral Insurance','Blue Motor Finance','Outros'],
+pet_plan: ['Animal Health Maya','Animal Health Niko','Pet Plan','Outros']
 };
 
 const DEFAULT_STORES = [
-  'Asda',
-  'Tesco',
-  'Aldi',
-  'Lidl',
-  "Sainsbury's",
-  'Morrisons',
-  'Costco',
-  'Farmfoods',
-  'Scotmid',
-  'Amazon'
+'Asda','Tesco','Aldi','Lidl',"Sainsbury's",'Morrisons','Costco','Farmfoods','Scotmid','Amazon'
 ];
 
 const TEMPLATE_EXPENSES = [
-  { id:'renting', name:'Aluguel', detailMode:'none', preset:'members' },
-  { id:'council_tax', name:'Council Tax', detailMode:'none', preset:'members' },
-  { id:'internet', name:'Internet', detailMode:'none', preset:'members' },
-  { id:'tv_license', name:'TV License', detailMode:'none', preset:'custom', shares:{ 'Elias':100 } },
-  { id:'disney', name:'Streaming - Disney+', detailMode:'none', preset:'custom', shares:{ 'Elias':33.3333, 'Flavio':33.3333, 'Flora':33.3333 } },
-  { id:'netflix', name:'Streaming - Netflix', detailMode:'none', preset:'custom', shares:{ 'Elias':33.3333, 'Flavio':33.3333, 'Flora':33.3333 } },
-  { id:'youtube', name:'Youtube Premium', detailMode:'none', preset:'custom', shares:{ 'Elias':50, 'Flora':50 } },
-  { id:'gas', name:'Gás', detailMode:'none', preset:'members' },
-  { id:'electricity', name:'Eletricidade', detailMode:'none', preset:'members' },
-  { id:'finance_car', name:'Finance Car', detailMode:'category4', preset:'custom', shares:{ 'Elias':50, 'Flavio':50 } },
-  { id:'pet_plan', name:'Pet Plan', detailMode:'category4', preset:'custom', shares:{ 'Elias':50, 'Flavio':50 } },
-  { id:'bos_loan', name:'Empréstimo Bank of Scotland', detailMode:'none', preset:'custom', shares:{ 'Elias':100 } },
-  { id:'food', name:'Supermercados (Alimentos)', detailMode:'supermarket', preset:'members' },
-  { id:'home', name:'Supermercados (Higiene, limpeza, etc.)', detailMode:'supermarket', preset:'members' },
-  { id:'declared_expenses', name:'Rateio das despesas declaradas', detailMode:'declared', preset:'members', declaredValues:{} },
-  { id:'adjustments', name:'Abatimentos por pagam. em contas pessoais', detailMode:'declared_offsets', preset:'custom', negative:true, shares:{}, autoManaged:true, fixedAllocations:{} }
+{ id:'renting', name:'Aluguel', detailMode:'none', preset:'members' },
+{ id:'council_tax', name:'Council Tax', detailMode:'none', preset:'members' },
+{ id:'internet', name:'Internet', detailMode:'none', preset:'members' },
+{ id:'tv_license', name:'TV License', detailMode:'none', preset:'custom', shares:{ 'Elias':100 } },
+{ id:'disney', name:'Streaming - Disney+', detailMode:'none', preset:'custom', shares:{ 'Elias':33.3333, 'Flavio':33.3333, 'Flora':33.3333 } },
+{ id:'netflix', name:'Streaming - Netflix', detailMode:'none', preset:'custom', shares:{ 'Elias':33.3333, 'Flavio':33.3333, 'Flora':33.3333 } },
+{ id:'youtube', name:'Youtube Premium', detailMode:'none', preset:'custom', shares:{ 'Elias':50, 'Flora':50 } },
+{ id:'gas', name:'Gás', detailMode:'none', preset:'members' },
+{ id:'electricity', name:'Eletricidade', detailMode:'none', preset:'members' },
+{ id:'finance_car', name:'Finance Car', detailMode:'category4', preset:'custom', shares:{ 'Elias':50, 'Flavio':50 } },
+{ id:'pet_plan', name:'Pet Plan', detailMode:'category4', preset:'custom', shares:{ 'Elias':50, 'Flavio':50 } },
+{ id:'bos_loan', name:'Empréstimo Bank of Scotland', detailMode:'none', preset:'custom', shares:{ 'Elias':100 } },
+{ id:'food', name:'Supermercados (Alimentos)', detailMode:'supermarket', preset:'members' },
+{ id:'home', name:'Supermercados (Higiene, limpeza, etc.)', detailMode:'supermarket', preset:'members' },
+{ id:'declared_expenses', name:'Rateio das despesas declaradas', detailMode:'declared', preset:'members', declaredValues:{} },
+{ id:'adjustments', name:'Abatimentos por pagam. em contas pessoais', detailMode:'declared_offsets', preset:'custom', negative:true, shares:{}, autoManaged:true, fixedAllocations:{} }
+];
+
+const CHART_COLORS = [
+'#0d7ea2','#d86d09','#2b7a43','#a23db1','#cf3f5a','#7d5a00','#1666c1','#6c757d','#009688','#8e44ad'
 ];
 
 let db;
@@ -712,1507 +818,1678 @@ let currentBudget = null;
 let activeExpenseId = null;
 let peopleDraft = [];
 
-function clone(obj){
-  return JSON.parse(JSON.stringify(obj));
-}
+function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
 
 function parseDotNumber(value){
-  if (value === null || value === undefined) return 0;
-  let s = String(value).trim();
-  if (!s) return 0;
-  s = s.replace(/£/g, '').replace(/\s+/g, '');
-  s = s.replace(/,/g, '');
-  s = s.replace(/[^0-9.\-]/g, '');
-  const firstDot = s.indexOf('.');
-  if (firstDot !== -1) {
-    s = s.slice(0, firstDot + 1) + s.slice(firstDot + 1).replace(/\./g, '');
-  }
-  const n = Number(s);
-  return Number.isFinite(n) ? n : 0;
+if (value === null || value === undefined) return 0;
+let s = String(value).trim();
+if (!s) return 0;
+s = s.replace(/£/g, '').replace(/\s+/g, '');
+s = s.replace(/,/g, '');
+s = s.replace(/[^0-9.\-]/g, '');
+const firstDot = s.indexOf('.');
+if (firstDot !== -1) s = s.slice(0, firstDot + 1) + s.slice(firstDot + 1).replace(/\./g, '');
+const n = Number(s);
+return Number.isFinite(n) ? n : 0;
 }
 
-function formatDotNumber(value, decimals = 2){
-  return Number(value || 0).toFixed(decimals);
-}
-
-function money(value){
-  return `£${formatDotNumber(value, 2)}`;
-}
-
-function percentText(value){
-  return `${formatDotNumber(value, 2)}%`;
-}
+function formatDotNumber(value, decimals = 2){ return Number(value || 0).toFixed(decimals); }
+function money(value){ return `£${formatDotNumber(value, 2)}`; }
+function percentText(value){ return `${formatDotNumber(value, 2)}%`; }
 
 window.formatDecimalField = function(el, decimals = 2){
-  el.value = formatDotNumber(parseDotNumber(el.value), decimals);
+el.value = formatDotNumber(parseDotNumber(el.value), decimals);
 };
 
 function dateToBR(v){
-  if(!v) return '';
-  if (/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return v;
-  const parts = v.split('-');
-  if(parts.length !== 3) return v;
-  return `${parts[2]}/${parts[1]}/${parts[0]}`;
+if(!v) return '';
+if (/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return v;
+const parts = v.split('-');
+if(parts.length !== 3) return v;
+return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
 
 function normalizeDateInputBR(v){
-  let s = String(v || '').trim().replace(/\D/g,'');
-  if(!s) return '';
-  if(s.length > 8) s = s.slice(0,8);
-  if(s.length >= 5) return `${s.slice(0,2)}/${s.slice(2,4)}/${s.slice(4)}`;
-  if(s.length >= 3) return `${s.slice(0,2)}/${s.slice(2)}`;
-  return s;
+let s = String(v || '').trim().replace(/\D/g,'');
+if(!s) return '';
+if(s.length > 8) s = s.slice(0,8);
+if(s.length >= 5) return `${s.slice(0,2)}/${s.slice(2,4)}/${s.slice(4)}`;
+if(s.length >= 3) return `${s.slice(0,2)}/${s.slice(2)}`;
+return s;
 }
 
-window.formatDateFieldBR = function(el){
-  el.value = normalizeDateInputBR(el.value);
-};
+window.formatDateFieldBR = function(el){ el.value = normalizeDateInputBR(el.value); };
 
 function isValidDateBR(v){
-  if(!/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return false;
-  const [dd,mm,yyyy] = v.split('/').map(Number);
-  const d = new Date(yyyy, mm - 1, dd);
-  return d.getFullYear() === yyyy && d.getMonth() === mm - 1 && d.getDate() === dd;
+if(!/^\d{2}\/\d{2}\/\d{4}$/.test(v)) return false;
+const [dd,mm,yyyy] = v.split('/').map(Number);
+const d = new Date(yyyy, mm - 1, dd);
+return d.getFullYear() === yyyy && d.getMonth() === mm - 1 && d.getDate() === dd;
 }
 
 function monthLabel(ym){
-  if(!ym) return 'Sem mês selecionado';
-  const [y,m] = ym.split('-');
-  return new Date(Number(y), Number(m)-1, 1)
-    .toLocaleDateString('pt-BR',{month:'short', year:'numeric'})
-    .replace('.','');
+if(!ym) return 'Sem mês selecionado';
+const [y,m] = ym.split('-');
+return new Date(Number(y), Number(m)-1, 1)
+.toLocaleDateString('pt-BR',{month:'short', year:'numeric'})
+.replace('.','');
 }
 
-function tx(store, mode='readonly'){
-  return db.transaction(store, mode).objectStore(store);
+function shortMonthLabel(ym){
+if(!ym) return '';
+const [y,m] = ym.split('-');
+const names = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+return names[Number(m) - 1] || '';
 }
+
+function tx(store, mode='readonly'){ return db.transaction(store, mode).objectStore(store); }
 
 function getReq(req){
-  return new Promise((res,rej)=>{
-    req.onsuccess = ()=>res(req.result);
-    req.onerror = ()=>rej(req.error);
-  });
+return new Promise((res,rej)=>{
+req.onsuccess = ()=>res(req.result);
+req.onerror = ()=>rej(req.error);
+});
 }
 
 function initDB(){
-  return new Promise((resolve,reject)=>{
-    const req = indexedDB.open('orcamento_familiar_db_v18', 1);
-    req.onupgradeneeded = e => {
-      const d = e.target.result;
-      if(!d.objectStoreNames.contains('budgets')){
-        d.createObjectStore('budgets', { keyPath:'id' });
-      }
-      if(!d.objectStoreNames.contains('settings')){
-        d.createObjectStore('settings', { keyPath:'key' });
-      }
-    };
-    req.onsuccess = e => {
-      db = e.target.result;
-      resolve();
-    };
-    req.onerror = ()=>reject(req.error);
-  });
+return new Promise((resolve,reject)=>{
+const req = indexedDB.open('orcamento_familiar_db_v19', 1);
+req.onupgradeneeded = e => {
+const d = e.target.result;
+if(!d.objectStoreNames.contains('budgets')) d.createObjectStore('budgets', { keyPath:'id' });
+if(!d.objectStoreNames.contains('settings')) d.createObjectStore('settings', { keyPath:'key' });
+};
+req.onsuccess = e => { db = e.target.result; resolve(); };
+req.onerror = ()=>reject(req.error);
+});
 }
 
 async function getSettings(){
-  const base = await getReq(tx('settings').get('appSettings'));
-  if(base) return base;
-
-  const value = {
-    members: clone(DEFAULT_MEMBERS),
-    stores: clone(DEFAULT_STORES),
-    defaultRules: {}
-  };
-  return { key:'appSettings', value };
+const base = await getReq(tx('settings').get('appSettings'));
+if(base) return base;
+const value = { members: clone(DEFAULT_MEMBERS), stores: clone(DEFAULT_STORES), defaultRules: {} };
+return { key:'appSettings', value };
 }
 
 async function saveSettingsValue(value){
-  await getReq(tx('settings','readwrite').put({ key:'appSettings', value }));
+await getReq(tx('settings','readwrite').put({ key:'appSettings', value }));
 }
 
 function getMembers(){
-  const set = new Set(currentBudget?.members || []);
-  if(set.size) return Array.from(set);
-  return clone(DEFAULT_MEMBERS);
+const set = new Set(currentBudget?.members || []);
+if(set.size) return Array.from(set);
+return clone(DEFAULT_MEMBERS);
 }
 
 function normalizeSharesForMembers(shares, members){
-  const out = {};
-  for(const m of members) out[m] = Number(shares?.[m] || 0);
-  return out;
+const out = {};
+for(const m of members) out[m] = Number(shares?.[m] || 0);
+return out;
 }
 
-function getDeclaredExpense(){
-  return currentBudget?.expenses.find(e => e.id === 'declared_expenses');
-}
-
-function getAdjustmentsExpense(){
-  return currentBudget?.expenses.find(e => e.id === 'adjustments');
-}
+function getDeclaredExpense(){ return currentBudget?.expenses.find(e => e.id === 'declared_expenses'); }
+function getAdjustmentsExpense(){ return currentBudget?.expenses.find(e => e.id === 'adjustments'); }
 
 function normalizeDeclaredValues(values, members){
-  const out = {};
-  for(const m of members){
-    out[m] = Number(values?.[m] || 0);
-  }
-  return out;
+const out = {};
+for(const m of members) out[m] = Number(values?.[m] || 0);
+return out;
 }
 
 function syncAdjustmentsFromDeclared(){
-  if(!currentBudget) return;
-  const declared = getDeclaredExpense();
-  const adjustments = getAdjustmentsExpense();
-  const members = getMembers();
-  if(!declared || !adjustments) return;
+if(!currentBudget) return;
+const declared = getDeclaredExpense();
+const adjustments = getAdjustmentsExpense();
+const members = getMembers();
+if(!declared || !adjustments) return;
 
-  const declaredValues = normalizeDeclaredValues(declared.declaredValues || {}, members);
-  const fixed = {};
-  let total = 0;
+const declaredValues = normalizeDeclaredValues(declared.declaredValues || {}, members);
+const fixed = {};
+let total = 0;
 
-  for(const m of members){
-    fixed[m] = -Math.round((declaredValues[m] + Number.EPSILON) * 100) / 100;
-    total += declaredValues[m];
-  }
+for(const m of members){
+fixed[m] = -Math.round((declaredValues[m] + Number.EPSILON) * 100) / 100;
+total += declaredValues[m];
+}
 
-  total = Math.round((total + Number.EPSILON) * 100) / 100;
-
-  adjustments.fixedAllocations = fixed;
-  adjustments.value = total;
-  adjustments.launched = declared.launched;
-  adjustments.declaredValues = clone(declaredValues);
+total = Math.round((total + Number.EPSILON) * 100) / 100;
+adjustments.fixedAllocations = fixed;
+adjustments.value = total;
+adjustments.launched = declared.launched;
+adjustments.declaredValues = clone(declaredValues);
 }
 
 function equalShareForMembers(members){
-  const out = {};
-  if(!members.length) return out;
+const out = {};
+if(!members.length) return out;
 
-  const base = Math.floor((100 / members.length) * 100) / 100;
-  let acc = 0;
+const base = Math.floor((100 / members.length) * 100) / 100;
+let acc = 0;
 
-  members.forEach((m, idx) => {
-    if(idx === members.length - 1){
-      out[m] = Math.round((100 - acc) * 100) / 100;
-    } else {
-      out[m] = base;
-      acc += base;
-    }
-  });
+members.forEach((m, idx) => {
+if(idx === members.length - 1){
+out[m] = Math.round((100 - acc) * 100) / 100;
+} else {
+out[m] = base;
+acc += base;
+}
+});
 
-  return out;
+return out;
 }
 
 function distributeSelectedMembers(selected, allMembers){
-  const out = {};
-  for(const m of allMembers) out[m] = 0;
-  if(!selected.length) return out;
-
-  const equal = equalShareForMembers(selected);
-  for(const m of selected){
-    out[m] = equal[m];
-  }
-  return out;
+const out = {};
+for(const m of allMembers) out[m] = 0;
+if(!selected.length) return out;
+const equal = equalShareForMembers(selected);
+for(const m of selected) out[m] = equal[m];
+return out;
 }
 
 function buildPresetShares(preset, members, explicitShares){
-  if(explicitShares && Object.keys(explicitShares).length){
-    return normalizeSharesForMembers(explicitShares, members);
-  }
-  if(preset === 'members'){
-    return equalShareForMembers(members);
-  }
-  return normalizeSharesForMembers({}, members);
+if(explicitShares && Object.keys(explicitShares).length) return normalizeSharesForMembers(explicitShares, members);
+if(preset === 'members') return equalShareForMembers(members);
+return normalizeSharesForMembers({}, members);
 }
 
 function buildExpenseFromTemplate(tpl, members, settings){
-  const exp = clone(tpl);
-  exp.value = Number(exp.value || 0);
-  exp.launched = Boolean(exp.launched);
-  exp.details = exp.details || [];
-  exp.declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, members);
-  exp.fixedAllocations = exp.fixedAllocations || {};
-  exp.shares = buildPresetShares(
-    exp.preset,
-    members,
-    settings?.value?.defaultRules?.[exp.id]?.shares || exp.shares || {}
-  );
-  exp.preset = settings?.value?.defaultRules?.[exp.id]?.preset || exp.preset || 'custom';
+const exp = clone(tpl);
+exp.value = Number(exp.value || 0);
+exp.launched = Boolean(exp.launched);
+exp.details = exp.details || [];
+exp.declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, members);
+exp.fixedAllocations = exp.fixedAllocations || {};
+exp.shares = buildPresetShares(
+exp.preset,
+members,
+settings?.value?.defaultRules?.[exp.id]?.shares || exp.shares || {}
+);
+exp.preset = settings?.value?.defaultRules?.[exp.id]?.preset || exp.preset || 'custom';
+exp.categoryNames = exp.categoryNames || [];
 
-  if(exp.detailMode === 'category4' && (!exp.details || !exp.details.length)){
-    exp.details = (DETAIL_PRESETS[exp.id] || []).map(name => ({ category:name, value:0 }));
-  }
+if(exp.detailMode === 'category4' && (!exp.details || !exp.details.length)){
+const names = exp.categoryNames.length ? exp.categoryNames : (DETAIL_PRESETS[exp.id] || ['Categoria 1','Categoria 2','Categoria 3','Outros']);
+exp.categoryNames = names;
+exp.details = names.map(name => ({ category:name, value:0 }));
+}
 
-  return exp;
+return exp;
+}
+
+function isCustomExpense(exp){
+return Boolean(exp?.customExpense);
 }
 
 function ensureBudgetStructure(budget, settings){
-  const members = budget.members?.length ? budget.members : clone(DEFAULT_MEMBERS);
-  budget.members = members;
-  budget.stores = budget.stores?.length ? budget.stores : clone(DEFAULT_STORES);
-  budget.expenses = budget.expenses || [];
+const members = budget.members?.length ? budget.members : clone(DEFAULT_MEMBERS);
+budget.members = members;
+budget.stores = budget.stores?.length ? budget.stores : clone(DEFAULT_STORES);
+budget.expenses = budget.expenses || [];
 
-  for(const tpl of TEMPLATE_EXPENSES){
-    let existing = budget.expenses.find(e => e.id === tpl.id);
-    if(!existing){
-      existing = buildExpenseFromTemplate(tpl, members, settings);
-      budget.expenses.push(existing);
-    } else {
-      existing.name = tpl.name;
-      existing.detailMode = tpl.detailMode;
-      existing.preset = existing.preset || tpl.preset || 'custom';
-      existing.autoManaged = Boolean(tpl.autoManaged);
-      existing.negative = Boolean(tpl.negative);
-      existing.details = existing.details || [];
-      existing.declaredValues = normalizeDeclaredValues(existing.declaredValues || {}, members);
-      existing.fixedAllocations = existing.fixedAllocations || {};
-      existing.shares = normalizeSharesForMembers(existing.shares || tpl.shares || {}, members);
+for(const tpl of TEMPLATE_EXPENSES){
+let existing = budget.expenses.find(e => e.id === tpl.id);
+if(!existing){
+existing = buildExpenseFromTemplate(tpl, members, settings);
+budget.expenses.push(existing);
+} else {
+existing.name = tpl.name;
+existing.detailMode = tpl.detailMode;
+existing.preset = existing.preset || tpl.preset || 'custom';
+existing.autoManaged = Boolean(tpl.autoManaged);
+existing.negative = Boolean(tpl.negative);
+existing.details = existing.details || [];
+existing.declaredValues = normalizeDeclaredValues(existing.declaredValues || {}, members);
+existing.fixedAllocations = existing.fixedAllocations || {};
+existing.shares = normalizeSharesForMembers(existing.shares || tpl.shares || {}, members);
+existing.categoryNames = existing.categoryNames || [];
 
-      if(existing.detailMode === 'category4' && (!existing.details || !existing.details.length)){
-        existing.details = (DETAIL_PRESETS[existing.id] || []).map(name => ({ category:name, value:0 }));
-      }
-    }
-  }
+if(existing.detailMode === 'category4' && (!existing.details || !existing.details.length)){
+const names = existing.categoryNames.length ? existing.categoryNames : (DETAIL_PRESETS[existing.id] || ['Categoria 1','Categoria 2','Categoria 3','Outros']);
+existing.categoryNames = names;
+existing.details = names.map(name => ({ category:name, value:0 }));
+}
+}
+}
 
-  const order = TEMPLATE_EXPENSES.map(t => t.id);
-  budget.expenses.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id));
+budget.expenses = budget.expenses.map(exp => {
+exp.customExpense = Boolean(exp.customExpense);
+exp.autoManaged = Boolean(exp.autoManaged);
+exp.negative = Boolean(exp.negative);
+exp.details = exp.details || [];
+exp.categoryNames = exp.categoryNames || [];
+exp.declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, members);
+exp.fixedAllocations = exp.fixedAllocations || {};
+exp.shares = normalizeSharesForMembers(exp.shares || {}, members);
 
-  syncAdjustmentsFromDeclared();
+if(exp.detailMode === 'category4' && (!exp.details || !exp.details.length)){
+const names = exp.categoryNames.length ? exp.categoryNames : (DETAIL_PRESETS[exp.id] || ['Categoria 1','Categoria 2','Categoria 3','Outros']);
+exp.categoryNames = names;
+exp.details = names.map(name => ({ category:name, value:0 }));
+}
+
+return exp;
+});
+
+const order = TEMPLATE_EXPENSES.map(t => t.id);
+budget.expenses.sort((a,b)=>{
+const aTpl = order.indexOf(a.id);
+const bTpl = order.indexOf(b.id);
+const aIsTpl = aTpl !== -1;
+const bIsTpl = bTpl !== -1;
+if(aIsTpl && bIsTpl) return aTpl - bTpl;
+if(aIsTpl && !bIsTpl) return -1;
+if(!aIsTpl && bIsTpl) return 1;
+return String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR');
+});
+
+syncAdjustmentsFromDeclared();
 }
 
 async function createBudgetIfNeeded(monthId, title){
-  let budget = await loadBudget(monthId);
-  const settings = await getSettings();
+let budget = await loadBudget(monthId);
+const settings = await getSettings();
 
-  if(!budget){
-    const members = clone(settings.value.members || DEFAULT_MEMBERS);
+if(!budget){
+const members = clone(settings.value.members || DEFAULT_MEMBERS);
+budget = {
+id:monthId,
+title:title || monthLabel(monthId),
+members,
+stores: clone(settings.value.stores || DEFAULT_STORES),
+expenses:[]
+};
 
-    budget = {
-      id:monthId,
-      title:title || monthLabel(monthId),
-      members,
-      stores: clone(settings.value.stores || DEFAULT_STORES),
-      expenses:[]
-    };
+for(const tpl of TEMPLATE_EXPENSES) budget.expenses.push(buildExpenseFromTemplate(tpl, members, settings));
 
-    for(const tpl of TEMPLATE_EXPENSES){
-      budget.expenses.push(buildExpenseFromTemplate(tpl, members, settings));
-    }
+currentBudget = budget;
+syncAdjustmentsFromDeclared();
+await getReq(tx('budgets','readwrite').put(budget));
+} else {
+currentBudget = budget;
+ensureBudgetStructure(budget, settings);
+}
 
-    syncAdjustmentsFromDeclared();
-    await getReq(tx('budgets','readwrite').put(budget));
-  } else {
-    ensureBudgetStructure(budget, settings);
-  }
-
-  currentBudget = budget;
-  document.getElementById('budgetTitle').value = currentBudget.title || '';
-  renderAll();
+currentBudget = budget;
+document.getElementById('budgetTitle').value = currentBudget.title || '';
+renderAll();
 }
 
 async function saveBudget(){
-  if(currentBudget){
-    syncAdjustmentsFromDeclared();
-    await getReq(tx('budgets','readwrite').put(currentBudget));
-  }
-  await refreshSavedMonths();
+if(currentBudget){
+syncAdjustmentsFromDeclared();
+await getReq(tx('budgets','readwrite').put(currentBudget));
+}
+await refreshSavedMonths();
+await renderHistoryChart();
 }
 
-async function loadBudget(id){
-  return await getReq(tx('budgets').get(id));
-}
-
-async function deleteBudget(id){
-  return await getReq(tx('budgets','readwrite').delete(id));
-}
-
-async function getAllBudgets(){
-  return await getReq(tx('budgets').getAll());
-}
+async function loadBudget(id){ return await getReq(tx('budgets').get(id)); }
+async function deleteBudget(id){ return await getReq(tx('budgets','readwrite').delete(id)); }
+async function getAllBudgets(){ return await getReq(tx('budgets').getAll()); }
 
 function clearScreen(){
-  document.getElementById('reportMonthLabel').textContent = 'Nenhum mês selecionado';
-  document.getElementById('budgetBody').innerHTML = '';
-  document.getElementById('budgetHeadRow').innerHTML = '';
-  document.getElementById('budgetFootRow').innerHTML = '';
-  document.getElementById('detailsPanels').innerHTML = '';
-  document.getElementById('doneList').innerHTML = '';
-  document.getElementById('launchList').innerHTML = '';
-  document.getElementById('budgetTitle').value = '';
-  document.getElementById('peoplePreview').innerHTML = '';
-  document.getElementById('launchPanel').classList.add('hidden');
-  document.getElementById('editorPanel').classList.add('hidden');
-  document.getElementById('peoplePanel').classList.add('hidden');
-  setStatus('');
+document.getElementById('reportMonthLabel').textContent = 'Nenhum mês selecionado';
+document.getElementById('budgetBody').innerHTML = '';
+document.getElementById('budgetHeadRow').innerHTML = '';
+document.getElementById('budgetFootRow').innerHTML = '';
+document.getElementById('detailsPanels').innerHTML = '';
+document.getElementById('doneList').innerHTML = '';
+document.getElementById('launchList').innerHTML = '';
+document.getElementById('budgetTitle').value = '';
+document.getElementById('peoplePreview').innerHTML = '';
+document.getElementById('launchPanel').classList.add('hidden');
+document.getElementById('editorPanel').classList.add('hidden');
+document.getElementById('peoplePanel').classList.add('hidden');
+document.getElementById('customExpensePanel').classList.add('hidden');
+setStatus('');
 }
 
 async function refreshSavedMonths(){
-  const el = document.getElementById('savedMonths');
-  const all = (await getAllBudgets()).sort((a,b)=>a.id < b.id ? 1 : -1);
+const el = document.getElementById('savedMonths');
+const all = (await getAllBudgets()).sort((a,b)=>a.id < b.id ? 1 : -1);
 
-  if(!all.length){
-    el.innerHTML = '<div class="tiny">Nenhum mês salvo ainda.</div>';
-    return;
-  }
+if(!all.length){
+el.innerHTML = '<div class="tiny">Nenhum mês salvo ainda.</div>';
+return;
+}
 
-  el.innerHTML = all.map(b => `
-    <button type="button" class="expense-btn" onclick="openSavedMonth('${b.id.replace(/'/g,'')}')">
-      <span>
-        <strong style="font-size:13px;">${escapeHtml(b.title || monthLabel(b.id))}</strong><br>
-        <span class="tiny">${escapeHtml(b.id)}</span>
-      </span>
-      <span class="badge">Abrir</span>
-    </button>
-  `).join('');
+el.innerHTML = all.map(b => `
+<button type="button" class="expense-btn" onclick="openSavedMonth('${b.id.replace(/'/g,'')}')">
+<span>
+<strong style="font-size:13px;">${escapeHtml(b.title || monthLabel(b.id))}</strong><br>
+<span class="tiny">${escapeHtml(b.id)}</span>
+</span>
+<span class="badge">Abrir</span>
+</button>
+`).join('');
 }
 
 window.openSavedMonth = async function(id){
-  const b = await loadBudget(id);
-  if(!b) return;
-  const settings = await getSettings();
-  ensureBudgetStructure(b, settings);
-  alert('Este mês já foi lançado. O sistema vai abrir os dados guardados.');
-  currentBudget = b;
-  document.getElementById('budgetMonth').value = id;
-  document.getElementById('budgetTitle').value = b.title || monthLabel(id);
-  renderAll();
+const b = await loadBudget(id);
+if(!b) return;
+const settings = await getSettings();
+currentBudget = b;
+ensureBudgetStructure(b, settings);
+alert('Este mês já foi lançado. O sistema vai abrir os dados guardados.');
+document.getElementById('budgetMonth').value = id;
+document.getElementById('budgetTitle').value = b.title || monthLabel(id);
+renderAll();
 };
 
-function getExpense(id){
-  return currentBudget?.expenses.find(e=>e.id===id);
+function getExpense(id){ return currentBudget?.expenses.find(e=>e.id===id); }
+function unlaunchedExpenses(){ return currentBudget ? currentBudget.expenses.filter(e=>!e.launched && !e.autoManaged) : []; }
+function launchedExpenses(){ return currentBudget ? currentBudget.expenses.filter(e=>e.launched && !e.autoManaged) : []; }
+
+function calculateAllocationsForBudget(budget, exp){
+const members = budget?.members?.length ? budget.members : clone(DEFAULT_MEMBERS);
+
+if(exp.fixedAllocations && Object.keys(exp.fixedAllocations).length){
+const out = {};
+let subtotal = 0;
+for(const m of members){
+out[m] = Math.round((Number(exp.fixedAllocations[m] || 0) + Number.EPSILON) * 100) / 100;
+subtotal += out[m];
+}
+subtotal = Math.round((subtotal + Number.EPSILON) * 100) / 100;
+return { allocations: out, subtotal };
 }
 
-function unlaunchedExpenses(){
-  return currentBudget ? currentBudget.expenses.filter(e=>!e.launched && !e.autoManaged) : [];
+const sign = exp.negative ? -1 : 1;
+const shares = normalizeSharesForMembers(exp.shares || {}, members);
+const out = {};
+let subtotal = 0;
+
+for(const m of members){
+const val = sign * (Number(exp.value || 0) * (Number(shares[m] || 0) / 100));
+out[m] = Math.round((val + Number.EPSILON) * 100) / 100;
+subtotal += out[m];
 }
 
-function launchedExpenses(){
-  return currentBudget ? currentBudget.expenses.filter(e=>e.launched && !e.autoManaged) : [];
+subtotal = Math.round((subtotal + Number.EPSILON) * 100) / 100;
+return { allocations: out, subtotal };
 }
 
-function calculateAllocations(exp){
-  const members = getMembers();
+function calculateAllocations(exp){ return calculateAllocationsForBudget(currentBudget, exp); }
 
-  if(exp.fixedAllocations && Object.keys(exp.fixedAllocations).length){
-    const out = {};
-    let subtotal = 0;
-    for(const m of members){
-      out[m] = Math.round((Number(exp.fixedAllocations[m] || 0) + Number.EPSILON) * 100) / 100;
-      subtotal += out[m];
-    }
-    subtotal = Math.round((subtotal + Number.EPSILON) * 100) / 100;
-    return { allocations: out, subtotal };
-  }
+function totalsByMember(){
+const members = getMembers();
+const totals = {};
+for(const m of members) totals[m] = 0;
+if(!currentBudget) return totals;
 
-  const sign = exp.negative ? -1 : 1;
-  const shares = normalizeSharesForMembers(exp.shares || {}, members);
-  const out = {};
-  let subtotal = 0;
+for(const e of currentBudget.expenses.filter(x=>x.launched || x.autoManaged)){
+const calc = calculateAllocations(e).allocations;
+for(const m of members) totals[m] += calc[m] || 0;
+}
 
-  for(const m of members){
-    const val = sign * (Number(exp.value || 0) * (Number(shares[m] || 0) / 100));
-    out[m] = Math.round((val + Number.EPSILON) * 100) / 100;
-    subtotal += out[m];
-  }
+for(const m of members) totals[m] = Math.round((totals[m] + Number.EPSILON) * 100) / 100;
+return totals;
+}
 
-  subtotal = Math.round((subtotal + Number.EPSILON) * 100) / 100;
-  return { allocations: out, subtotal };
+function totalsByMemberForBudget(budget){
+const members = budget?.members?.length ? budget.members : clone(DEFAULT_MEMBERS);
+const totals = {};
+for(const m of members) totals[m] = 0;
+if(!budget?.expenses?.length) return totals;
+
+for(const e of budget.expenses.filter(x=>x.launched || x.autoManaged)){
+const calc = calculateAllocationsForBudget(budget, e).allocations;
+for(const m of members) totals[m] += calc[m] || 0;
+}
+
+for(const m of members) totals[m] = Math.round((totals[m] + Number.EPSILON) * 100) / 100;
+return totals;
 }
 
 function renderAll(){
-  const mainArea = document.getElementById('mainArea');
+const mainArea = document.getElementById('mainArea');
 
-  if(!currentBudget){
-    mainArea.classList.add('hidden');
-    clearScreen();
-    return;
-  }
+if(!currentBudget){
+mainArea.classList.add('hidden');
+clearScreen();
+renderHistoryChart();
+return;
+}
 
-  syncAdjustmentsFromDeclared();
-  mainArea.classList.remove('hidden');
-  renderHeader();
-  renderPeoplePreview();
-  renderLaunchList();
-  renderDoneList();
-  renderTable();
-  renderDetailsPanels();
+syncAdjustmentsFromDeclared();
+mainArea.classList.remove('hidden');
+renderHeader();
+renderPeoplePreview();
+renderLaunchList();
+renderDoneList();
+renderTable();
+renderDetailsPanels();
+renderHistoryChart();
 }
 
 function renderHeader(){
-  document.getElementById('reportMonthLabel').textContent =
-    currentBudget ? (currentBudget.title || monthLabel(currentBudget.id)) : 'Nenhum mês selecionado';
+document.getElementById('reportMonthLabel').textContent =
+currentBudget ? (currentBudget.title || monthLabel(currentBudget.id)) : 'Nenhum mês selecionado';
 }
 
 function renderPeoplePreview(){
-  const box = document.getElementById('peoplePreview');
-  const members = getMembers();
-  box.innerHTML = members.map(m=>`<span class="person-chip">${escapeHtml(m)}</span>`).join('');
+const box = document.getElementById('peoplePreview');
+box.innerHTML = getMembers().map(m=>`<span class="person-chip">${escapeHtml(m)}</span>`).join('');
 }
 
 function renderLaunchList(){
-  const box = document.getElementById('launchList');
-  const list = unlaunchedExpenses();
+const box = document.getElementById('launchList');
+const list = unlaunchedExpenses();
 
-  box.innerHTML =
-    !currentBudget ? '<div class="tiny">Abra um mês primeiro.</div>' :
-    !list.length ? '<div class="tiny">Todas as despesas deste mês já foram lançadas.</div>' :
-    list.map(e => `
-      <button type="button" class="expense-btn" onclick="startExpense('${e.id}')">
-        <span>${escapeHtml(e.name)}</span>
-        <span class="badge">Lançar</span>
-      </button>
-    `).join('');
+box.innerHTML =
+!currentBudget ? '<div class="tiny">Abra um mês primeiro.</div>' :
+!list.length ? '<div class="tiny">Todas as despesas deste mês já foram lançadas.</div>' :
+list.map(e => `
+<button type="button" class="expense-btn" onclick="startExpense('${e.id}')">
+<span>${escapeHtml(e.name)}</span>
+<span class="badge">Lançar</span>
+</button>
+`).join('');
 }
 
 window.startExpense = function(id){
-  activeExpenseId = id;
-  setStatus('');
+activeExpenseId = id;
+setStatus('');
 
-  const exp = getExpense(id);
-  if(!exp) return;
+const exp = getExpense(id);
+if(!exp) return;
 
-  document.getElementById('launchPanel').classList.add('hidden');
-  document.getElementById('editorPanel').classList.remove('hidden');
-  document.getElementById('editorPanel').scrollIntoView({behavior:'smooth', block:'nearest'});
+document.getElementById('launchPanel').classList.add('hidden');
+document.getElementById('customExpensePanel').classList.add('hidden');
+document.getElementById('editorPanel').classList.remove('hidden');
+document.getElementById('editorPanel').scrollIntoView({behavior:'smooth', block:'nearest'});
 
-  document.getElementById('editorTitle').textContent = exp.name;
-  document.getElementById('editorPresetLabel').textContent =
-    exp.preset === 'members' ? 'Por membros iguais' : 'Rateio editável';
+document.getElementById('editorTitle').textContent = exp.name;
+document.getElementById('editorPresetLabel').textContent = exp.preset === 'members' ? 'Por membros iguais' : 'Rateio editável';
+document.getElementById('expenseValue').value = formatDotNumber(exp.value, 2);
+document.getElementById('detailBox').style.display = exp.detailMode !== 'none' ? 'block' : 'none';
+document.getElementById('expenseValue').readOnly = exp.detailMode === 'declared';
 
-  document.getElementById('expenseValue').value = formatDotNumber(exp.value, 2);
-  document.getElementById('detailBox').style.display = exp.detailMode !== 'none' ? 'block' : 'none';
-  document.getElementById('expenseValue').readOnly = exp.detailMode === 'declared';
+renderSharesEditor(exp);
+renderDetailForm(exp);
+renderExpenseDetailList(exp);
 
-  renderSharesEditor(exp);
-  renderDetailForm(exp);
-  renderExpenseDetailList(exp);
+const addBtn = document.getElementById('btnAddDetail');
+addBtn.classList.toggle('hidden', exp.detailMode !== 'supermarket');
 
-  const addBtn = document.getElementById('btnAddDetail');
-  addBtn.classList.toggle('hidden', exp.detailMode !== 'supermarket');
+const presetButtons = document.getElementById('presetButtons');
+const sharesPanel = document.getElementById('sharesPanel');
+const isDeclared = exp.detailMode === 'declared';
 
-  const presetButtons = document.getElementById('presetButtons');
-  const sharesPanel = document.getElementById('sharesPanel');
-  const isDeclared = exp.detailMode === 'declared';
+presetButtons.classList.toggle('hidden', isDeclared);
+sharesPanel.classList.toggle('hidden', isDeclared);
 
-  presetButtons.classList.toggle('hidden', isDeclared);
-  sharesPanel.classList.toggle('hidden', isDeclared);
+const deleteBtn = document.getElementById('btnDeleteCustomExpense');
+deleteBtn.classList.toggle('hidden', !isCustomExpense(exp));
 };
 
-function safeId(v){
-  return String(v).replace(/[^a-zA-Z0-9_-]/g,'_');
-}
-
-function escapeQuotes(v){
-  return String(v).replace(/'/g,"\\'");
-}
+function safeId(v){ return String(v).replace(/[^a-zA-Z0-9_-]/g,'_'); }
+function escapeQuotes(v){ return String(v).replace(/'/g,"\\'"); }
 
 function renderSharesEditor(exp){
-  const members = getMembers();
-  const box = document.getElementById('sharesBox');
+const members = getMembers();
+const box = document.getElementById('sharesBox');
 
-  box.innerHTML = members.map(m => {
-    const checked = Number(exp.shares[m] || 0) > 0;
-    return `
-      <div class="share-row">
-        <label style="display:flex;align-items:center;gap:6px;">
-          <input type="checkbox" id="chk_${safeId(m)}" ${checked ? 'checked' : ''} onchange="toggleMember('${escapeQuotes(m)}')">
-          ${escapeHtml(m)}
-        </label>
-        <input type="text" id="pct_${safeId(m)}" value="${formatDotNumber(Number(exp.shares[m] || 0), 2)}" onblur="manualShareChange('${escapeQuotes(m)}', this.value)">
-        <span>%</span>
-      </div>
-    `;
-  }).join('');
+box.innerHTML = members.map(m => {
+const checked = Number(exp.shares[m] || 0) > 0;
+return `
+<div class="share-row">
+<label style="display:flex;align-items:center;gap:6px;">
+<input type="checkbox" id="chk_${safeId(m)}" ${checked ? 'checked' : ''} onchange="toggleMember('${escapeQuotes(m)}')">
+${escapeHtml(m)}
+</label>
+<input type="text" id="pct_${safeId(m)}" value="${formatDotNumber(Number(exp.shares[m] || 0), 2)}" onblur="manualShareChange('${escapeQuotes(m)}', this.value)">
+<span>%</span>
+</div>
+`;
+}).join('');
 
-  recalcSharesCheck();
+recalcSharesCheck();
 }
 
 function applySharesToEditor(shares){
-  const members = getMembers();
-
-  for(const m of members){
-    const inp = document.getElementById('pct_'+safeId(m));
-    const chk = document.getElementById('chk_'+safeId(m));
-    if(inp) inp.value = formatDotNumber(Number(shares[m] || 0), 2);
-    if(chk) chk.checked = Number(shares[m] || 0) > 0;
-  }
-
-  recalcSharesCheck();
+const members = getMembers();
+for(const m of members){
+const inp = document.getElementById('pct_'+safeId(m));
+const chk = document.getElementById('chk_'+safeId(m));
+if(inp) inp.value = formatDotNumber(Number(shares[m] || 0), 2);
+if(chk) chk.checked = Number(shares[m] || 0) > 0;
+}
+recalcSharesCheck();
 }
 
 window.toggleMember = function(member){
-  const members = getMembers();
-  const selected = [];
-
-  members.forEach(m => {
-    const chk = document.getElementById('chk_'+safeId(m));
-    if(chk && chk.checked){
-      selected.push(m);
-    }
-  });
-
-  const shares = distributeSelectedMembers(selected, members);
-  applySharesToEditor(shares);
+const members = getMembers();
+const selected = [];
+members.forEach(m => {
+const chk = document.getElementById('chk_'+safeId(m));
+if(chk && chk.checked) selected.push(m);
+});
+applySharesToEditor(distributeSelectedMembers(selected, members));
 };
 
 window.manualShareChange = function(member, value){
-  const members = getMembers();
-  const out = {};
-  members.forEach(m => out[m] = 0);
+const members = getMembers();
+const out = {};
+members.forEach(m => out[m] = 0);
 
-  let target = parseDotNumber(value);
-  if(target < 0) target = 0;
-  if(target > 100) target = 100;
+let target = parseDotNumber(value);
+if(target < 0) target = 0;
+if(target > 100) target = 100;
 
-  const selected = [];
-  members.forEach(m => {
-    const chk = document.getElementById('chk_'+safeId(m));
-    if(chk?.checked){
-      selected.push(m);
-    }
-  });
+const selected = [];
+members.forEach(m => {
+const chk = document.getElementById('chk_'+safeId(m));
+if(chk?.checked) selected.push(m);
+});
 
-  if(target > 0 && !selected.includes(member)){
-    selected.push(member);
-  }
+if(target > 0 && !selected.includes(member)) selected.push(member);
 
-  if(!selected.length){
-    applySharesToEditor(out);
-    return;
-  }
+if(!selected.length){
+applySharesToEditor(out);
+return;
+}
 
-  const others = selected.filter(m => m !== member);
-  out[member] = target;
+const others = selected.filter(m => m !== member);
+out[member] = target;
 
-  if(!others.length){
-    out[member] = 100;
-    applySharesToEditor(out);
-    return;
-  }
+if(!others.length){
+out[member] = 100;
+applySharesToEditor(out);
+return;
+}
 
-  const remaining = Math.max(0, 100 - out[member]);
+const remaining = Math.max(0, 100 - out[member]);
+let totalOthers = 0;
+others.forEach(m => totalOthers += parseDotNumber(document.getElementById('pct_'+safeId(m))?.value || 0));
 
-  let totalOthers = 0;
-  others.forEach(m => {
-    totalOthers += parseDotNumber(document.getElementById('pct_'+safeId(m))?.value || 0);
-  });
+if(totalOthers <= 0){
+const equalOthers = equalShareForMembers(others);
+let acc = out[member];
+others.forEach((m, idx) => {
+if(idx === others.length - 1){
+out[m] = Math.round((100 - acc) * 100) / 100;
+} else {
+out[m] = Math.round(((equalOthers[m] / 100) * remaining) * 100) / 100;
+acc += out[m];
+}
+});
+} else {
+let acc = out[member];
+others.forEach((m, idx) => {
+if(idx === others.length - 1){
+out[m] = Math.round((100 - acc) * 100) / 100;
+} else {
+out[m] = Math.round(((parseDotNumber(document.getElementById('pct_'+safeId(m))?.value || 0) / totalOthers) * remaining) * 100) / 100;
+acc += out[m];
+}
+});
+}
 
-  if(totalOthers <= 0){
-    const equalOthers = equalShareForMembers(others);
-    let acc = out[member];
-    others.forEach((m, idx) => {
-      if(idx === others.length - 1){
-        out[m] = Math.round((100 - acc) * 100) / 100;
-      } else {
-        out[m] = Math.round(((equalOthers[m] / 100) * remaining) * 100) / 100;
-        acc += out[m];
-      }
-    });
-  } else {
-    let acc = out[member];
-    others.forEach((m, idx) => {
-      if(idx === others.length - 1){
-        out[m] = Math.round((100 - acc) * 100) / 100;
-      } else {
-        out[m] = Math.round(((parseDotNumber(document.getElementById('pct_'+safeId(m))?.value || 0) / totalOthers) * remaining) * 100) / 100;
-        acc += out[m];
-      }
-    });
-  }
-
-  applySharesToEditor(out);
+applySharesToEditor(out);
 };
 
 window.recalcSharesCheck = function(){
-  const members = getMembers();
-  const total = members.reduce((s,m)=>s+parseDotNumber(document.getElementById('pct_'+safeId(m))?.value || 0),0);
-  const el = document.getElementById('sharesTotalCheck');
-  const ok = Math.abs(total - 100) < 0.01 || total === 0;
-  el.innerHTML = `Total do rateio: <span class="${ok ? 'oktext' : 'badtext'}">${percentText(total)}</span>${ok ? '' : ' (deve fechar em 100%)'}`;
+const members = getMembers();
+const total = members.reduce((s,m)=>s+parseDotNumber(document.getElementById('pct_'+safeId(m))?.value || 0),0);
+const el = document.getElementById('sharesTotalCheck');
+const ok = Math.abs(total - 100) < 0.01 || total === 0;
+el.innerHTML = `Total do rateio: <span class="${ok ? 'oktext' : 'badtext'}">${percentText(total)}</span>${ok ? '' : ' (deve fechar em 100%)'}`;
 };
 
 function applyPresetToEditor(type){
-  const members = getMembers();
-  let shares = {};
-  if(type === 'members'){
-    shares = equalShareForMembers(members);
-  } else {
-    shares = normalizeSharesForMembers({}, members);
-  }
-  applySharesToEditor(shares);
+const members = getMembers();
+let shares = {};
+if(type === 'members') shares = equalShareForMembers(members);
+else shares = normalizeSharesForMembers({}, members);
+applySharesToEditor(shares);
 }
 
 window.toggleDeclaredMember = function(member){
-  const members = getMembers();
-  const selected = [];
+const members = getMembers();
+const selected = [];
+members.forEach(m => {
+const chk = document.getElementById('decl_chk_'+safeId(m));
+if(chk?.checked) selected.push(m);
+});
 
-  members.forEach(m => {
-    const chk = document.getElementById('decl_chk_'+safeId(m));
-    if(chk?.checked){
-      selected.push(m);
-    }
-  });
+const shares = distributeSelectedMembers(selected, members);
+for(const m of members){
+const pctInput = document.getElementById('decl_pct_'+safeId(m));
+if(pctInput) pctInput.value = formatDotNumber(Number(shares[m] || 0), 2);
+}
 
-  const shares = distributeSelectedMembers(selected, members);
-
-  for(const m of members){
-    const pctInput = document.getElementById('decl_pct_'+safeId(m));
-    if(pctInput) pctInput.value = formatDotNumber(Number(shares[m] || 0), 2);
-  }
-
-  updateDeclaredTotalFromInputs();
+updateDeclaredTotalFromInputs();
 };
 
 window.manualDeclaredShareChange = function(member, value){
-  const members = getMembers();
-  const out = {};
-  members.forEach(m => out[m] = 0);
+const members = getMembers();
+const out = {};
+members.forEach(m => out[m] = 0);
 
-  let target = parseDotNumber(value);
-  if(target < 0) target = 0;
-  if(target > 100) target = 100;
+let target = parseDotNumber(value);
+if(target < 0) target = 0;
+if(target > 100) target = 100;
 
-  const selected = [];
-  members.forEach(m => {
-    const chk = document.getElementById('decl_chk_'+safeId(m));
-    if(chk?.checked){
-      selected.push(m);
-    }
-  });
+const selected = [];
+members.forEach(m => {
+const chk = document.getElementById('decl_chk_'+safeId(m));
+if(chk?.checked) selected.push(m);
+});
 
-  if(target > 0 && !selected.includes(member)){
-    selected.push(member);
-    const chk = document.getElementById('decl_chk_'+safeId(member));
-    if(chk) chk.checked = true;
-  }
+if(target > 0 && !selected.includes(member)){
+selected.push(member);
+const chk = document.getElementById('decl_chk_'+safeId(member));
+if(chk) chk.checked = true;
+}
 
-  if(!selected.length){
-    members.forEach(m => {
-      const pct = document.getElementById('decl_pct_'+safeId(m));
-      if(pct) pct.value = '0.00';
-    });
-    updateDeclaredTotalFromInputs();
-    return;
-  }
+if(!selected.length){
+members.forEach(m => {
+const pct = document.getElementById('decl_pct_'+safeId(m));
+if(pct) pct.value = '0.00';
+});
+updateDeclaredTotalFromInputs();
+return;
+}
 
-  const others = selected.filter(m => m !== member);
-  out[member] = target;
+const others = selected.filter(m => m !== member);
+out[member] = target;
 
-  if(!others.length){
-    out[member] = 100;
-  } else {
-    const remaining = Math.max(0, 100 - out[member]);
-    let totalOthers = 0;
-    others.forEach(m => {
-      totalOthers += parseDotNumber(document.getElementById('decl_pct_'+safeId(m))?.value || 0);
-    });
+if(!others.length){
+out[member] = 100;
+} else {
+const remaining = Math.max(0, 100 - out[member]);
+let totalOthers = 0;
+others.forEach(m => totalOthers += parseDotNumber(document.getElementById('decl_pct_'+safeId(m))?.value || 0));
 
-    if(totalOthers <= 0){
-      const equalOthers = equalShareForMembers(others);
-      let acc = out[member];
-      others.forEach((m, idx) => {
-        if(idx === others.length - 1){
-          out[m] = Math.round((100 - acc) * 100) / 100;
-        } else {
-          out[m] = Math.round(((equalOthers[m] / 100) * remaining) * 100) / 100;
-          acc += out[m];
-        }
-      });
-    } else {
-      let acc = out[member];
-      others.forEach((m, idx) => {
-        if(idx === others.length - 1){
-          out[m] = Math.round((100 - acc) * 100) / 100;
-        } else {
-          out[m] = Math.round(((parseDotNumber(document.getElementById('decl_pct_'+safeId(m))?.value || 0) / totalOthers) * remaining) * 100) / 100;
-          acc += out[m];
-        }
-      });
-    }
-  }
+if(totalOthers <= 0){
+const equalOthers = equalShareForMembers(others);
+let acc = out[member];
+others.forEach((m, idx) => {
+if(idx === others.length - 1){
+out[m] = Math.round((100 - acc) * 100) / 100;
+} else {
+out[m] = Math.round(((equalOthers[m] / 100) * remaining) * 100) / 100;
+acc += out[m];
+}
+});
+} else {
+let acc = out[member];
+others.forEach((m, idx) => {
+if(idx === others.length - 1){
+out[m] = Math.round((100 - acc) * 100) / 100;
+} else {
+out[m] = Math.round(((parseDotNumber(document.getElementById('decl_pct_'+safeId(m))?.value || 0) / totalOthers) * remaining) * 100) / 100;
+acc += out[m];
+}
+});
+}
+}
 
-  for(const m of members){
-    const pctInput = document.getElementById('decl_pct_'+safeId(m));
-    const chk = document.getElementById('decl_chk_'+safeId(m));
-    if(pctInput) pctInput.value = formatDotNumber(Number(out[m] || 0), 2);
-    if(chk) chk.checked = Number(out[m] || 0) > 0;
-  }
+for(const m of members){
+const pctInput = document.getElementById('decl_pct_'+safeId(m));
+const chk = document.getElementById('decl_chk_'+safeId(m));
+if(pctInput) pctInput.value = formatDotNumber(Number(out[m] || 0), 2);
+if(chk) chk.checked = Number(out[m] || 0) > 0;
+}
 
-  updateDeclaredTotalFromInputs();
+updateDeclaredTotalFromInputs();
 };
 
+function getCategoryNamesForExpense(exp){
+if(exp.categoryNames?.length) return exp.categoryNames;
+if(DETAIL_PRESETS[exp.id]?.length) return DETAIL_PRESETS[exp.id];
+return ['Categoria 1','Categoria 2','Categoria 3','Outros'];
+}
+
 function renderDetailForm(exp){
-  const box = document.getElementById('detailDynamicForm');
-  const members = getMembers();
+const box = document.getElementById('detailDynamicForm');
+const members = getMembers();
 
-  if(exp.detailMode === 'supermarket'){
-    const stores = currentBudget.stores || [];
-    box.innerHTML = `
-      <label for="detailStoreSelect">Escolher estabelecimento</label>
-      <select id="detailStoreSelect">
-        <option value="">Escolher estabelecimento</option>
-        ${stores.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('')}
-      </select>
+if(exp.detailMode === 'supermarket'){
+const stores = currentBudget.stores || [];
+box.innerHTML = `
+<label for="detailStoreSelect">Escolher estabelecimento</label>
+<select id="detailStoreSelect">
+<option value="">Escolher estabelecimento</option>
+${stores.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('')}
+</select>
 
-      <div class="detail-two-cols">
-        <div class="detail-col">
-          <input
-            type="text"
-            id="detailDate"
-            inputmode="numeric"
-            placeholder="dd/mm/aaaa"
-            aria-label="Data"
-            oninput="formatDateFieldBR(this)"
-          >
-        </div>
-        <div class="detail-col">
-          <input
-            type="text"
-            id="detailValue"
-            inputmode="decimal"
-            placeholder="0.00"
-            aria-label="Valor"
-            onblur="formatDecimalField(this, 2)"
-          >
-        </div>
-      </div>
+<div class="detail-two-cols">
+<div class="detail-col">
+<input type="text" id="detailDate" inputmode="numeric" placeholder="dd/mm/aaaa" aria-label="Data" oninput="formatDateFieldBR(this)">
+</div>
+<div class="detail-col">
+<input type="text" id="detailValue" inputmode="decimal" placeholder="0.00" aria-label="Valor" onblur="formatDecimalField(this, 2)">
+</div>
+</div>
 
-      <label for="detailNewStore">Novo estabelecimento</label>
-      <input type="text" id="detailNewStore" placeholder="Escreva aqui se o estabelecimento não estiver na lista">
-      <div class="tiny" style="margin-top:6px">
-        Data deve ser informada como dd/mm/aaaa. Valores usam ponto decimal.
-      </div>
-    `;
-    return;
-  }
+<label for="detailNewStore">Novo estabelecimento</label>
+<input type="text" id="detailNewStore" placeholder="Escreva aqui se o estabelecimento não estiver na lista">
+<div class="tiny" style="margin-top:6px">
+Data deve ser informada como dd/mm/aaaa. Valores usam ponto decimal.
+</div>
+`;
+return;
+}
 
-  if(exp.detailMode === 'category4'){
-    const categories = DETAIL_PRESETS[exp.id] || [];
-    box.innerHTML = categories.map((cat, idx) => {
-      const item = (exp.details || []).find(d => d.category === cat) || { category:cat, value:0 };
-      return `
-        <label for="cat_${idx}">${escapeHtml(cat)} (£)</label>
-        <input
-          type="text"
-          id="cat_${idx}"
-          data-category="${escapeHtml(cat)}"
-          inputmode="decimal"
-          value="${formatDotNumber(Number(item.value || 0), 2)}"
-          placeholder="0.00"
-          onblur="formatDecimalField(this, 2)"
-        >
-      `;
-    }).join('');
-    return;
-  }
+if(exp.detailMode === 'category4'){
+const categories = getCategoryNamesForExpense(exp);
+box.innerHTML = categories.map((cat, idx) => {
+const item = (exp.details || []).find(d => d.category === cat) || { category:cat, value:0 };
+return `
+<label for="cat_${idx}">${escapeHtml(cat)} (£)</label>
+<input type="text" id="cat_${idx}" data-category="${escapeHtml(cat)}" inputmode="decimal"
+value="${formatDotNumber(Number(item.value || 0), 2)}" placeholder="0.00" onblur="formatDecimalField(this, 2)">
+`;
+}).join('');
+return;
+}
 
-  if(exp.detailMode === 'declared'){
-    const declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, members);
-    box.innerHTML = `
-      <div class="tiny" style="margin-bottom:8px">
-        Informe quanto cada pessoa declarou ter pago diretamente e, na mesma linha, quem participa e qual o % de rateio.
-      </div>
-      <div class="declared-head">
-        <div>Nome</div>
-        <div style="text-align:right">Valor</div>
-        <div style="text-align:right">% rateio</div>
-      </div>
-      ${members.map(m => {
-        const share = Number(exp.shares?.[m] || 0);
-        const checked = share > 0;
-        return `
-          <div class="declared-row">
-            <label style="display:flex;align-items:center;gap:6px;margin:0;">
-              <input type="checkbox" id="decl_chk_${safeId(m)}" ${checked ? 'checked' : ''} onchange="toggleDeclaredMember('${escapeQuotes(m)}')">
-              ${escapeHtml(m)}
-            </label>
-            <input
-              type="text"
-              id="decl_val_${safeId(m)}"
-              inputmode="decimal"
-              value="${formatDotNumber(Number(declaredValues[m] || 0), 2)}"
-              placeholder="0.00"
-              onblur="updateDeclaredTotalFromInputs()"
-            >
-            <input
-              type="text"
-              id="decl_pct_${safeId(m)}"
-              inputmode="decimal"
-              value="${formatDotNumber(share, 2)}"
-              placeholder="0.00"
-              onblur="manualDeclaredShareChange('${escapeQuotes(m)}', this.value)"
-            >
-          </div>
-        `;
-      }).join('')}
-      <div class="total-check" id="declaredRateTotalCheck"></div>
-    `;
-    setTimeout(updateDeclaredTotalFromInputs, 0);
-    return;
-  }
+if(exp.detailMode === 'declared'){
+const declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, members);
+box.innerHTML = `
+<div class="tiny" style="margin-bottom:8px">
+Informe quanto cada pessoa declarou ter pago diretamente e, na mesma linha, quem participa e qual o % de rateio.
+</div>
+<div class="declared-head">
+<div>Nome</div>
+<div style="text-align:right">Valor</div>
+<div style="text-align:right">% rateio</div>
+</div>
+${members.map(m => {
+const share = Number(exp.shares?.[m] || 0);
+const checked = share > 0;
+return `
+<div class="declared-row">
+<label style="display:flex;align-items:center;gap:6px;margin:0;">
+<input type="checkbox" id="decl_chk_${safeId(m)}" ${checked ? 'checked' : ''} onchange="toggleDeclaredMember('${escapeQuotes(m)}')">
+${escapeHtml(m)}
+</label>
+<input type="text" id="decl_val_${safeId(m)}" inputmode="decimal"
+value="${formatDotNumber(Number(declaredValues[m] || 0), 2)}" placeholder="0.00" onblur="updateDeclaredTotalFromInputs()">
+<input type="text" id="decl_pct_${safeId(m)}" inputmode="decimal"
+value="${formatDotNumber(share, 2)}" placeholder="0.00" onblur="manualDeclaredShareChange('${escapeQuotes(m)}', this.value)">
+</div>
+`;
+}).join('')}
+<div class="total-check" id="declaredRateTotalCheck"></div>
+`;
+setTimeout(updateDeclaredTotalFromInputs, 0);
+return;
+}
 
-  box.innerHTML = '';
+box.innerHTML = '';
 }
 
 window.updateDeclaredTotalFromInputs = function(){
-  const members = getMembers();
-  let total = 0;
-  let pctTotal = 0;
+const members = getMembers();
+let total = 0;
+let pctTotal = 0;
 
-  for(const m of members){
-    total += parseDotNumber(document.getElementById('decl_val_'+safeId(m))?.value || 0);
-    pctTotal += parseDotNumber(document.getElementById('decl_pct_'+safeId(m))?.value || 0);
-  }
+for(const m of members){
+total += parseDotNumber(document.getElementById('decl_val_'+safeId(m))?.value || 0);
+pctTotal += parseDotNumber(document.getElementById('decl_pct_'+safeId(m))?.value || 0);
+}
 
-  const input = document.getElementById('expenseValue');
-  if(input) input.value = formatDotNumber(total, 2);
+const input = document.getElementById('expenseValue');
+if(input) input.value = formatDotNumber(total, 2);
 
-  const el = document.getElementById('declaredRateTotalCheck');
-  if(el){
-    const ok = Math.abs(pctTotal - 100) < 0.01 || pctTotal === 0;
-    el.innerHTML = `Total do rateio: <span class="${ok ? 'oktext' : 'badtext'}">${percentText(pctTotal)}</span>${ok ? '' : ' (deve fechar em 100%)'}`;
-  }
+const el = document.getElementById('declaredRateTotalCheck');
+if(el){
+const ok = Math.abs(pctTotal - 100) < 0.01 || pctTotal === 0;
+el.innerHTML = `Total do rateio: <span class="${ok ? 'oktext' : 'badtext'}">${percentText(pctTotal)}</span>${ok ? '' : ' (deve fechar em 100%)'}`;
+}
 };
 
 function renderExpenseDetailList(exp){
-  const box = document.getElementById('detailList');
-  const members = getMembers();
+const box = document.getElementById('detailList');
+const members = getMembers();
 
-  if(exp.detailMode === 'none'){
-    box.innerHTML = '';
-    return;
-  }
+if(exp.detailMode === 'none'){
+box.innerHTML = '';
+return;
+}
 
-  if(exp.detailMode === 'category4'){
-    box.innerHTML = `
-      <div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
-        <table class="detail-table">
-          <thead>
-            <tr>
-              <th>Entrada</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${(exp.details || []).map(d=>`
-              <tr>
-                <td>${escapeHtml(d.category || '')}</td>
-                <td style="text-align:right">${money(d.value)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-    return;
-  }
+if(exp.detailMode === 'category4'){
+box.innerHTML = `
+<div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
+<table class="detail-table">
+<thead><tr><th>Entrada</th><th>Valor</th></tr></thead>
+<tbody>
+${(exp.details || []).map(d=>`
+<tr><td>${escapeHtml(d.category || '')}</td><td style="text-align:right">${money(d.value)}</td></tr>
+`).join('')}
+</tbody>
+</table>
+</div>
+`;
+return;
+}
 
-  if(exp.detailMode === 'declared'){
-    const declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, members);
-    box.innerHTML = `
-      <div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
-        <table class="detail-table">
-          <thead>
-            <tr>
-              <th>Pessoa</th>
-              <th>Valor declarado</th>
-              <th>% rateio</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${members.map(m=>`
-              <tr>
-                <td>${escapeHtml(m)}</td>
-                <td style="text-align:right">${money(declaredValues[m] || 0)}</td>
-                <td style="text-align:right">${percentText(exp.shares?.[m] || 0)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-    `;
-    return;
-  }
+if(exp.detailMode === 'declared'){
+const declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, members);
+box.innerHTML = `
+<div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
+<table class="detail-table">
+<thead><tr><th>Pessoa</th><th>Valor declarado</th><th>% rateio</th></tr></thead>
+<tbody>
+${members.map(m=>`
+<tr>
+<td>${escapeHtml(m)}</td>
+<td style="text-align:right">${money(declaredValues[m] || 0)}</td>
+<td style="text-align:right">${percentText(exp.shares?.[m] || 0)}</td>
+</tr>
+`).join('')}
+</tbody>
+</table>
+</div>
+`;
+return;
+}
 
-  if(!exp.details.length){
-    box.innerHTML = '<div class="tiny" style="margin-top:8px">Nenhum item detalhado.</div>';
-    return;
-  }
+if(!exp.details.length){
+box.innerHTML = '<div class="tiny" style="margin-top:8px">Nenhum item detalhado.</div>';
+return;
+}
 
-  box.innerHTML = `
-    <div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
-      <table class="detail-table">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Estabelecimento</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${exp.details.map(d=>`
-            <tr>
-              <td>${dateToBR(d.date||'')}</td>
-              <td>${escapeHtml(d.place||'')}</td>
-              <td style="text-align:right">${money(d.value)}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
+box.innerHTML = `
+<div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
+<table class="detail-table">
+<thead><tr><th>Data</th><th>Estabelecimento</th><th>Valor</th></tr></thead>
+<tbody>
+${exp.details.map(d=>`
+<tr>
+<td>${dateToBR(d.date||'')}</td>
+<td>${escapeHtml(d.place||'')}</td>
+<td style="text-align:right">${money(d.value)}</td>
+</tr>
+`).join('')}
+</tbody>
+</table>
+</div>
+`;
 }
 
 function renderDoneList(){
-  const box = document.getElementById('doneList');
-
-  if(!currentBudget){
-    box.innerHTML = '<div class="tiny">Abra um mês primeiro.</div>';
-    return;
-  }
-
-  const list = launchedExpenses();
-
-  box.innerHTML = !list.length
-    ? '<div class="tiny">Nenhuma despesa lançada ainda.</div>'
-    : list.map(e => `
-      <button type="button" class="expense-btn" onclick="editDoneExpense('${e.id}')">
-        <span>${escapeHtml(e.name)}<br><span class="tiny">${money(e.value)}</span></span>
-        <span class="badge ok">Editar</span>
-      </button>
-    `).join('');
+const box = document.getElementById('doneList');
+if(!currentBudget){
+box.innerHTML = '<div class="tiny">Abra um mês primeiro.</div>';
+return;
 }
 
-window.editDoneExpense = function(id){
-  window.startExpense(id);
-};
-
-function totalsByMember(){
-  const members = getMembers();
-  const totals = {};
-  for(const m of members) totals[m] = 0;
-
-  if(!currentBudget) return totals;
-
-  for(const e of currentBudget.expenses.filter(x=>x.launched || x.autoManaged)){
-    const calc = calculateAllocations(e).allocations;
-    for(const m of members){
-      totals[m] += calc[m] || 0;
-    }
-  }
-
-  for(const m of members){
-    totals[m] = Math.round((totals[m] + Number.EPSILON) * 100) / 100;
-  }
-
-  return totals;
+const list = launchedExpenses();
+box.innerHTML = !list.length
+? '<div class="tiny">Nenhuma despesa lançada ainda.</div>'
+: list.map(e => `
+<button type="button" class="expense-btn" onclick="editDoneExpense('${e.id}')">
+<span>${escapeHtml(e.name)}<br><span class="tiny">${money(e.value)}</span></span>
+<span class="badge ok">Editar</span>
+</button>
+`).join('');
 }
+
+window.editDoneExpense = function(id){ window.startExpense(id); };
 
 function renderTable(){
-  const head = document.getElementById('budgetHeadRow');
-  const body = document.getElementById('budgetBody');
-  const foot = document.getElementById('budgetFootRow');
-  const members = getMembers();
+const head = document.getElementById('budgetHeadRow');
+const body = document.getElementById('budgetBody');
+const foot = document.getElementById('budgetFootRow');
+const members = getMembers();
 
-  head.innerHTML = `
-    <th class="thead-main">Descrição</th>
-    ${members.map(m=>`<th>${escapeHtml(m)}</th>`).join('')}
-    <th>Subtotal</th>
-  `;
+head.innerHTML = `
+<th class="thead-main">Descrição</th>
+${members.map(m=>`<th>${escapeHtml(m)}</th>`).join('')}
+<th>Subtotal</th>
+`;
 
-  if(!currentBudget){
-    body.innerHTML = `<tr><td colspan="${members.length+2}" class="muted">Abra um mês para começar.</td></tr>`;
-    foot.innerHTML = '';
-    return;
-  }
+if(!currentBudget){
+body.innerHTML = `<tr><td colspan="${members.length+2}" class="muted">Abra um mês para começar.</td></tr>`;
+foot.innerHTML = '';
+return;
+}
 
-  body.innerHTML = currentBudget.expenses.map(e => {
-    const calc = (e.launched || e.autoManaged)
-      ? calculateAllocations(e)
-      : { allocations:{}, subtotal:0 };
+body.innerHTML = currentBudget.expenses.map(e => {
+const calc = (e.launched || e.autoManaged) ? calculateAllocations(e) : { allocations:{}, subtotal:0 };
+return `
+<tr>
+<td>${escapeHtml(e.name)}</td>
+${members.map(m=>`<td>${money(calc.allocations[m] || 0)}</td>`).join('')}
+<td>${money(calc.subtotal)}</td>
+</tr>
+`;
+}).join('');
 
-    return `
-      <tr>
-        <td>${escapeHtml(e.name)}</td>
-        ${members.map(m=>`<td>${money(calc.allocations[m] || 0)}</td>`).join('')}
-        <td>${money(calc.subtotal)}</td>
-      </tr>
-    `;
-  }).join('');
-
-  const totals = totalsByMember();
-  foot.innerHTML = `
-    <td>TOTAL INDIVIDUAL</td>
-    ${members.map(m=>`<td>${money(totals[m] || 0)}</td>`).join('')}
-    <td>${money(Object.values(totals).reduce((a,b)=>a+b,0))}</td>
-  `;
+const totals = totalsByMember();
+foot.innerHTML = `
+<td>TOTAL INDIVIDUAL</td>
+${members.map(m=>`<td>${money(totals[m] || 0)}</td>`).join('')}
+<td>${money(Object.values(totals).reduce((a,b)=>a+b,0))}</td>
+`;
 }
 
 function renderDetailsPanels(){
-  const box = document.getElementById('detailsPanels');
+const box = document.getElementById('detailsPanels');
+if(!currentBudget){
+box.innerHTML = '<div class="tiny">Abra um mês para ver os detalhes.</div>';
+return;
+}
 
-  if(!currentBudget){
-    box.innerHTML = '<div class="tiny">Abra um mês para ver os detalhes.</div>';
-    return;
-  }
+const detailed = currentBudget.expenses.filter(e =>
+(e.detailMode === 'supermarket' || e.detailMode === 'category4' || e.detailMode === 'declared') &&
+(e.launched || (e.id === 'declared_expenses' && e.value > 0))
+);
 
-  const detailed = currentBudget.expenses.filter(e =>
-    (e.detailMode === 'supermarket' || e.detailMode === 'category4' || e.detailMode === 'declared') &&
-    (e.launched || (e.id === 'declared_expenses' && e.value > 0))
-  );
+box.innerHTML = !detailed.length
+? '<div class="tiny">Nenhuma despesa detalhada lançada ainda.</div>'
+: detailed.map(e => {
+if(e.detailMode === 'category4'){
+return `
+<div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px">
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+<strong style="font-size:13px;">${escapeHtml(e.name)}</strong>
+<span class="pill">Total ${money(e.value)}</span>
+</div>
+<div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
+<table class="detail-table">
+<thead><tr><th>Entrada</th><th>Valor</th></tr></thead>
+<tbody>
+${(e.details||[]).map(d=>`
+<tr><td>${escapeHtml(d.category||'')}</td><td style="text-align:right">${money(d.value)}</td></tr>
+`).join('')}
+</tbody>
+</table>
+</div>
+</div>
+`;
+}
 
-  box.innerHTML = !detailed.length
-    ? '<div class="tiny">Nenhuma despesa detalhada lançada ainda.</div>'
-    : detailed.map(e => {
-      if(e.detailMode === 'category4'){
-        return `
-          <div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px">
-            <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
-              <strong style="font-size:13px;">${escapeHtml(e.name)}</strong>
-              <span class="pill">Total ${money(e.value)}</span>
-            </div>
-            <div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
-              <table class="detail-table">
-                <thead>
-                  <tr>
-                    <th>Entrada</th>
-                    <th>Valor</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${(e.details||[]).map(d=>`
-                    <tr>
-                      <td>${escapeHtml(d.category||'')}</td>
-                      <td style="text-align:right">${money(d.value)}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-      }
+if(e.detailMode === 'declared'){
+const members = getMembers();
+const declaredValues = normalizeDeclaredValues(e.declaredValues || {}, members);
+return `
+<div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px">
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+<strong style="font-size:13px;">${escapeHtml(e.name)}</strong>
+<span class="pill">Total ${money(e.value)}</span>
+</div>
+<div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
+<table class="detail-table">
+<thead><tr><th>Pessoa</th><th>Valor declarado</th><th>% rateio</th></tr></thead>
+<tbody>
+${members.map(m=>`
+<tr>
+<td>${escapeHtml(m)}</td>
+<td style="text-align:right">${money(declaredValues[m] || 0)}</td>
+<td style="text-align:right">${percentText(e.shares?.[m] || 0)}</td>
+</tr>
+`).join('')}
+</tbody>
+</table>
+</div>
+</div>
+`;
+}
 
-      if(e.detailMode === 'declared'){
-        const members = getMembers();
-        const declaredValues = normalizeDeclaredValues(e.declaredValues || {}, members);
-        return `
-          <div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px">
-            <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
-              <strong style="font-size:13px;">${escapeHtml(e.name)}</strong>
-              <span class="pill">Total ${money(e.value)}</span>
-            </div>
-            <div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
-              <table class="detail-table">
-                <thead>
-                  <tr>
-                    <th>Pessoa</th>
-                    <th>Valor declarado</th>
-                    <th>% rateio</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${members.map(m=>`
-                    <tr>
-                      <td>${escapeHtml(m)}</td>
-                      <td style="text-align:right">${money(declaredValues[m] || 0)}</td>
-                      <td style="text-align:right">${percentText(e.shares?.[m] || 0)}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        `;
-      }
-
-      return `
-        <div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px">
-          <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
-            <strong style="font-size:13px;">${escapeHtml(e.name)}</strong>
-            <span class="pill">Total ${money(e.value)}</span>
-          </div>
-          ${
-            e.details.length
-              ? `
-              <div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
-                <table class="detail-table">
-                  <thead>
-                    <tr>
-                      <th>Data</th>
-                      <th>Estabelecimento</th>
-                      <th>Valor</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${e.details.map(d=>`
-                      <tr>
-                        <td>${dateToBR(d.date||'')}</td>
-                        <td>${escapeHtml(d.place||'')}</td>
-                        <td style="text-align:right">${money(d.value)}</td>
-                      </tr>
-                    `).join('')}
-                  </tbody>
-                </table>
-              </div>
-              `
-              : '<div class="tiny" style="margin-top:8px">Sem itens detalhados.</div>'
-          }
-        </div>
-      `;
-    }).join('');
+return `
+<div style="border:1px solid var(--line);border-radius:12px;padding:10px;margin-bottom:10px">
+<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap">
+<strong style="font-size:13px;">${escapeHtml(e.name)}</strong>
+<span class="pill">Total ${money(e.value)}</span>
+</div>
+${
+e.details.length
+? `
+<div class="table-wrap" style="margin-top:8px; overflow-x:auto;">
+<table class="detail-table">
+<thead><tr><th>Data</th><th>Estabelecimento</th><th>Valor</th></tr></thead>
+<tbody>
+${e.details.map(d=>`
+<tr>
+<td>${dateToBR(d.date||'')}</td>
+<td>${escapeHtml(d.place||'')}</td>
+<td style="text-align:right">${money(d.value)}</td>
+</tr>
+`).join('')}
+</tbody>
+</table>
+</div>
+`
+: '<div class="tiny" style="margin-top:8px">Sem itens detalhados.</div>'
+}
+</div>
+`;
+}).join('');
 }
 
 function inferPresetFromShares(shares){
-  const members = getMembers();
-  const equal = equalShareForMembers(members);
-  const same = members.every(m => Math.abs((shares[m]||0)-(equal[m]||0)) < 0.02);
-  return same ? 'members' : 'custom';
+const members = getMembers();
+const equal = equalShareForMembers(members);
+const same = members.every(m => Math.abs((shares[m]||0)-(equal[m]||0)) < 0.02);
+return same ? 'members' : 'custom';
 }
 
 async function saveExpenseLaunch(){
-  const exp = getExpense(activeExpenseId);
-  if(!exp) return;
+const exp = getExpense(activeExpenseId);
+if(!exp) return;
 
-  let value = parseDotNumber(document.getElementById('expenseValue').value || 0);
-  const members = getMembers();
-  const shares = {};
+let value = parseDotNumber(document.getElementById('expenseValue').value || 0);
+const members = getMembers();
+const shares = {};
 
-  if(exp.detailMode === 'declared'){
-    const declaredValues = {};
-    for(const m of members){
-      declaredValues[m] = parseDotNumber(document.getElementById('decl_val_'+safeId(m))?.value || 0);
-      shares[m] = parseDotNumber(document.getElementById('decl_pct_'+safeId(m))?.value || 0);
-    }
+if(exp.detailMode === 'declared'){
+const declaredValues = {};
+for(const m of members){
+declaredValues[m] = parseDotNumber(document.getElementById('decl_val_'+safeId(m))?.value || 0);
+shares[m] = parseDotNumber(document.getElementById('decl_pct_'+safeId(m))?.value || 0);
+}
 
-    const total = members.reduce((s,m)=>s+shares[m],0);
-    if(Math.abs(total - 100) > 0.01 && total !== 0){
-      alert('O total do rateio deve fechar em 100%.');
-      return;
-    }
+const total = members.reduce((s,m)=>s+shares[m],0);
+if(Math.abs(total - 100) > 0.01 && total !== 0){
+alert('O total do rateio deve fechar em 100%.');
+return;
+}
 
-    exp.declaredValues = declaredValues;
-    value = Object.values(declaredValues).reduce((s,v)=>s+Number(v||0),0);
-  } else {
-    for(const m of members){
-      shares[m] = parseDotNumber(document.getElementById('pct_'+safeId(m)).value || 0);
-    }
+exp.declaredValues = declaredValues;
+value = Object.values(declaredValues).reduce((s,v)=>s+Number(v||0),0);
+} else {
+for(const m of members) shares[m] = parseDotNumber(document.getElementById('pct_'+safeId(m)).value || 0);
 
-    const total = members.reduce((s,m)=>s+shares[m],0);
-    if(Math.abs(total - 100) > 0.01 && total !== 0){
-      alert('O total do rateio deve fechar em 100%.');
-      return;
-    }
-  }
+const total = members.reduce((s,m)=>s+shares[m],0);
+if(Math.abs(total - 100) > 0.01 && total !== 0){
+alert('O total do rateio deve fechar em 100%.');
+return;
+}
+}
 
-  if(exp.detailMode === 'category4'){
-    const categories = DETAIL_PRESETS[exp.id] || [];
-    exp.details = categories.map((cat, idx) => ({
-      category: cat,
-      value: parseDotNumber(document.getElementById('cat_'+idx)?.value || 0)
-    }));
-    value = exp.details.reduce((s,d)=>s+Number(d.value||0),0);
-  }
+if(exp.detailMode === 'category4'){
+const categories = getCategoryNamesForExpense(exp);
+exp.details = categories.map((cat, idx) => ({
+category: cat,
+value: parseDotNumber(document.getElementById('cat_'+idx)?.value || 0)
+}));
+exp.value = exp.details.reduce((s,d)=>s+Number(d.value||0),0);
+value = exp.value;
+}
 
-  exp.value = value;
-  exp.shares = shares;
-  exp.launched = true;
-  exp.preset = inferPresetFromShares(shares);
+exp.value = value;
+exp.shares = shares;
+exp.launched = true;
+exp.preset = inferPresetFromShares(shares);
 
-  syncAdjustmentsFromDeclared();
+syncAdjustmentsFromDeclared();
 
-  const settings = await getSettings();
-  settings.value.defaultRules = settings.value.defaultRules || {};
-  settings.value.defaultRules[exp.id] = {
-    shares: clone(shares),
-    preset: exp.preset
-  };
+const settings = await getSettings();
+settings.value.defaultRules = settings.value.defaultRules || {};
+settings.value.defaultRules[exp.id] = { shares: clone(shares), preset: exp.preset };
 
-  if(currentBudget.stores?.length){
-    settings.value.stores = clone(currentBudget.stores);
-  }
+if(currentBudget.stores?.length) settings.value.stores = clone(currentBudget.stores);
 
-  await saveSettingsValue(settings.value);
+await saveSettingsValue(settings.value);
 
-  currentBudget.title = document.getElementById('budgetTitle').value.trim() || monthLabel(currentBudget.id);
-  await saveBudget();
+currentBudget.title = document.getElementById('budgetTitle').value.trim() || monthLabel(currentBudget.id);
+await saveBudget();
 
-  activeExpenseId = null;
-  document.getElementById('editorPanel').classList.add('hidden');
-  setStatus('Despesa lançada com sucesso.');
-  renderAll();
+activeExpenseId = null;
+document.getElementById('editorPanel').classList.add('hidden');
+setStatus('Despesa lançada com sucesso.');
+renderAll();
 }
 
 async function addDetailToActive(){
-  const exp = getExpense(activeExpenseId);
-  if(!exp || exp.detailMode !== 'supermarket') return;
+const exp = getExpense(activeExpenseId);
+if(!exp || exp.detailMode !== 'supermarket') return;
 
-  const date = document.getElementById('detailDate').value.trim();
-  const selectedStore = document.getElementById('detailStoreSelect').value.trim();
-  const newStore = document.getElementById('detailNewStore').value.trim();
-  const place = newStore || selectedStore;
-  const value = parseDotNumber(document.getElementById('detailValue').value || 0);
+const date = document.getElementById('detailDate').value.trim();
+const selectedStore = document.getElementById('detailStoreSelect').value.trim();
+const newStore = document.getElementById('detailNewStore').value.trim();
+const place = newStore || selectedStore;
+const value = parseDotNumber(document.getElementById('detailValue').value || 0);
 
-  if(!isValidDateBR(date)){
-    alert('Informe a data no formato dd/mm/aaaa.');
-    return;
-  }
-  if(!place){
-    alert('Escolha ou escreva o estabelecimento.');
-    return;
-  }
-  if(!value){
-    alert('Informe o valor do item.');
-    return;
-  }
+if(!isValidDateBR(date)){ alert('Informe a data no formato dd/mm/aaaa.'); return; }
+if(!place){ alert('Escolha ou escreva o estabelecimento.'); return; }
+if(!value){ alert('Informe o valor do item.'); return; }
 
-  if(!currentBudget.stores.includes(place)){
-    currentBudget.stores.push(place);
-    currentBudget.stores.sort((a,b)=>a.localeCompare(b,'pt-BR'));
-  }
+if(!currentBudget.stores.includes(place)){
+currentBudget.stores.push(place);
+currentBudget.stores.sort((a,b)=>a.localeCompare(b,'pt-BR'));
+}
 
-  exp.details.push({ date, place, value });
-  exp.value = exp.details.reduce((s,d)=>s+Number(d.value||0),0);
+exp.details.push({ date, place, value });
+exp.value = exp.details.reduce((s,d)=>s+Number(d.value||0),0);
 
-  document.getElementById('expenseValue').value = formatDotNumber(exp.value, 2);
-  document.getElementById('detailDate').value = '';
-  document.getElementById('detailStoreSelect').value = '';
-  document.getElementById('detailNewStore').value = '';
-  document.getElementById('detailValue').value = '';
+document.getElementById('expenseValue').value = formatDotNumber(exp.value, 2);
+document.getElementById('detailDate').value = '';
+document.getElementById('detailStoreSelect').value = '';
+document.getElementById('detailNewStore').value = '';
+document.getElementById('detailValue').value = '';
 
-  renderDetailForm(exp);
-  renderExpenseDetailList(exp);
+renderDetailForm(exp);
+renderExpenseDetailList(exp);
 }
 
 function setStatus(msg){
-  const el = document.getElementById('mobileStatus');
-  if(el) el.textContent = msg || '';
+const el = document.getElementById('mobileStatus');
+if(el) el.textContent = msg || '';
 }
 
 function openLaunchPanel(){
-  if(!currentBudget){
-    alert('Abra um mês primeiro.');
-    return;
-  }
+if(!currentBudget){ alert('Abra um mês primeiro.'); return; }
 
-  const panel = document.getElementById('launchPanel');
-  const editor = document.getElementById('editorPanel');
+const panel = document.getElementById('launchPanel');
+const editor = document.getElementById('editorPanel');
+const custom = document.getElementById('customExpensePanel');
 
-  editor.classList.add('hidden');
-  panel.classList.toggle('hidden');
+editor.classList.add('hidden');
+custom.classList.add('hidden');
+panel.classList.toggle('hidden');
 
-  if(!panel.classList.contains('hidden')){
-    panel.classList.add('flash');
-    setTimeout(()=>panel.classList.remove('flash'), 600);
-    panel.scrollIntoView({behavior:'smooth', block:'nearest'});
-
-    const count = unlaunchedExpenses().length;
-    setStatus(
-      count
-        ? `Despesas pendentes: ${count}. Toque numa opção abaixo.`
-        : 'Não há despesas pendentes neste mês.'
-    );
-  }else{
-    setStatus('');
-  }
+if(!panel.classList.contains('hidden')){
+panel.classList.add('flash');
+setTimeout(()=>panel.classList.remove('flash'), 600);
+panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+const count = unlaunchedExpenses().length;
+setStatus(count ? `Despesas pendentes: ${count}. Toque numa opção abaixo.` : 'Não há despesas pendentes neste mês.');
+} else {
+setStatus('');
+}
 }
 
 function escapeHtml(str){
-  return String(str ?? '')
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#39;');
+return String(str ?? '')
+.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function openPeopleEditor(){
-  if(!currentBudget){
-    alert('Abra um mês primeiro.');
-    return;
-  }
-  peopleDraft = clone(getMembers());
-  renderPeopleEditor();
-  document.getElementById('peoplePanel').classList.toggle('hidden');
+if(!currentBudget){ alert('Abra um mês primeiro.'); return; }
+peopleDraft = clone(getMembers());
+renderPeopleEditor();
+document.getElementById('peoplePanel').classList.toggle('hidden');
 }
 
 function renderPeopleEditor(){
-  const box = document.getElementById('peopleListBox');
-  box.innerHTML = peopleDraft.map((name, idx) => `
-    <div class="people-row">
-      <input type="text" value="${escapeHtml(name)}" oninput="updateDraftPerson(${idx}, this.value)">
-      <button type="button" class="danger btn-small" onclick="removeDraftPerson(${idx})">Excluir</button>
-    </div>
-  `).join('');
+const box = document.getElementById('peopleListBox');
+box.innerHTML = peopleDraft.map((name, idx) => `
+<div class="people-row">
+<input type="text" value="${escapeHtml(name)}" oninput="updateDraftPerson(${idx}, this.value)">
+<button type="button" class="danger btn-small" onclick="removeDraftPerson(${idx})">Excluir</button>
+</div>
+`).join('');
 }
 
-window.updateDraftPerson = function(idx, value){
-  peopleDraft[idx] = value;
-};
-
-window.removeDraftPerson = function(idx){
-  peopleDraft.splice(idx, 1);
-  renderPeopleEditor();
-};
+window.updateDraftPerson = function(idx, value){ peopleDraft[idx] = value; };
+window.removeDraftPerson = function(idx){ peopleDraft.splice(idx, 1); renderPeopleEditor(); };
 
 async function savePeopleChanges(){
-  const cleaned = peopleDraft.map(v=>v.trim()).filter(Boolean);
-  const unique = [];
-  for(const name of cleaned){
-    if(!unique.includes(name)) unique.push(name);
-  }
+const cleaned = peopleDraft.map(v=>v.trim()).filter(Boolean);
+const unique = [];
+for(const name of cleaned) if(!unique.includes(name)) unique.push(name);
 
-  if(!unique.length){
-    alert('Precisa existir pelo menos uma pessoa.');
-    return;
-  }
+if(!unique.length){ alert('Precisa existir pelo menos uma pessoa.'); return; }
 
-  const oldMembers = getMembers();
-  currentBudget.members = unique;
+const oldMembers = getMembers();
+currentBudget.members = unique;
 
-  for(const exp of currentBudget.expenses){
-    const newShares = {};
-    for(const name of unique){
-      if(oldMembers.includes(name)){
-        newShares[name] = Number(exp.shares?.[name] || 0);
-      } else {
-        newShares[name] = 0;
-      }
-    }
-    exp.shares = newShares;
+for(const exp of currentBudget.expenses){
+const newShares = {};
+for(const name of unique){
+if(oldMembers.includes(name)) newShares[name] = Number(exp.shares?.[name] || 0);
+else newShares[name] = 0;
+}
+exp.shares = newShares;
+if(exp.preset === 'members') exp.shares = equalShareForMembers(unique);
+if(exp.id === 'declared_expenses') exp.declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, unique);
+}
 
-    if(exp.preset === 'members'){
-      exp.shares = equalShareForMembers(unique);
-    }
+syncAdjustmentsFromDeclared();
 
-    if(exp.id === 'declared_expenses'){
-      exp.declaredValues = normalizeDeclaredValues(exp.declaredValues || {}, unique);
-    }
-  }
+const settings = await getSettings();
+settings.value.members = clone(unique);
+settings.value.stores = clone(currentBudget.stores || DEFAULT_STORES);
+await saveSettingsValue(settings.value);
+await saveBudget();
 
-  syncAdjustmentsFromDeclared();
+document.getElementById('peoplePanel').classList.add('hidden');
+renderAll();
+setStatus('Nomes atualizados.');
+}
 
-  const settings = await getSettings();
-  settings.value.members = clone(unique);
-  settings.value.stores = clone(currentBudget.stores || DEFAULT_STORES);
-  await saveSettingsValue(settings.value);
-  await saveBudget();
+function resetCustomExpenseForm(){
+document.getElementById('customExpenseName').value = '';
+document.getElementById('customExpensePreset').value = 'members';
+document.getElementById('customExpenseDetailMode').value = 'none';
+document.getElementById('customCategory1').value = '';
+document.getElementById('customCategory2').value = '';
+document.getElementById('customCategory3').value = '';
+document.getElementById('customCategory4').value = '';
+document.getElementById('customCategoryNamesBox').classList.add('hidden');
+}
 
-  document.getElementById('peoplePanel').classList.add('hidden');
-  renderAll();
-  setStatus('Nomes atualizados.');
+function openCustomExpensePanel(){
+if(!currentBudget){ alert('Abra um mês primeiro.'); return; }
+document.getElementById('launchPanel').classList.add('hidden');
+document.getElementById('editorPanel').classList.add('hidden');
+const panel = document.getElementById('customExpensePanel');
+panel.classList.toggle('hidden');
+if(!panel.classList.contains('hidden')){
+resetCustomExpenseForm();
+panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+}
+
+function buildCustomExpenseId(){
+return 'custom_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+}
+
+async function createCustomExpense(){
+if(!currentBudget){ alert('Abra um mês primeiro.'); return; }
+
+const name = document.getElementById('customExpenseName').value.trim();
+const preset = document.getElementById('customExpensePreset').value;
+const detailMode = document.getElementById('customExpenseDetailMode').value;
+const members = getMembers();
+
+if(!name){
+alert('Informe o nome da despesa.');
+return;
+}
+
+const exp = {
+id: buildCustomExpenseId(),
+name,
+detailMode,
+preset,
+shares: buildPresetShares(preset, members, {}),
+value: 0,
+launched: false,
+details: [],
+customExpense: true,
+autoManaged: false,
+negative: false,
+fixedAllocations: {},
+declaredValues: normalizeDeclaredValues({}, members),
+categoryNames: []
+};
+
+if(detailMode === 'category4'){
+const names = [
+document.getElementById('customCategory1').value.trim() || 'Categoria 1',
+document.getElementById('customCategory2').value.trim() || 'Categoria 2',
+document.getElementById('customCategory3').value.trim() || 'Categoria 3',
+document.getElementById('customCategory4').value.trim() || 'Outros'
+];
+exp.categoryNames = names;
+exp.details = names.map(n => ({ category:n, value:0 }));
+}
+
+currentBudget.expenses.push(exp);
+const settings = await getSettings();
+ensureBudgetStructure(currentBudget, settings);
+await saveBudget();
+
+document.getElementById('customExpensePanel').classList.add('hidden');
+resetCustomExpenseForm();
+renderAll();
+setStatus('Despesa personalizada criada.');
+}
+
+async function deleteActiveCustomExpense(){
+const exp = getExpense(activeExpenseId);
+if(!exp || !isCustomExpense(exp)) return;
+if(!confirm('Deseja apagar esta despesa personalizada?')) return;
+
+currentBudget.expenses = currentBudget.expenses.filter(e => e.id !== exp.id);
+activeExpenseId = null;
+document.getElementById('editorPanel').classList.add('hidden');
+await saveBudget();
+renderAll();
+setStatus('Despesa personalizada apagada.');
+}
+
+function buildHistorySeries(budgets){
+const ordered = clone(budgets).sort((a,b)=>a.id.localeCompare(b.id));
+const allMembers = [];
+
+for(const budget of ordered){
+const members = budget?.members?.length ? budget.members : [];
+for(const m of members) if(!allMembers.includes(m)) allMembers.push(m);
+}
+
+const labels = ordered.map(b => shortMonthLabel(b.id));
+const years = [...new Set(ordered.map(b => String(b.id).split('-')[0]).filter(Boolean))];
+const axisYear = years.length === 1 ? years[0] : years.join('/');
+
+const series = {};
+for(const member of allMembers) series[member] = [];
+
+for(const budget of ordered){
+const totals = totalsByMemberForBudget(budget);
+for(const member of allMembers) series[member].push(Number(totals[member] || 0));
+}
+
+return { labels, series, members: allMembers, budgets: ordered, axisYear };
+}
+
+function getChartColor(index){ return CHART_COLORS[index % CHART_COLORS.length]; }
+
+function formatYAxisLabel(v){
+if(v >= 1000) return `£${Math.round(v).toLocaleString('en-GB')}`;
+return `£${Math.round(v)}`;
+}
+
+function drawHistoryChart(canvas, labels, members, series, axisYear){
+const ctx = canvas.getContext('2d');
+const box = canvas.parentElement;
+const dpr = window.devicePixelRatio || 1;
+const cssWidth = Math.max(box.clientWidth, 0);
+const cssHeight = box.clientHeight || 200;
+
+canvas.width = Math.floor(cssWidth * dpr);
+canvas.height = Math.floor(cssHeight * dpr);
+canvas.style.width = cssWidth + 'px';
+canvas.style.height = cssHeight + 'px';
+
+ctx.setTransform(1,0,0,1,0,0);
+ctx.scale(dpr, dpr);
+ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+const isMobile = cssWidth <= 480;
+const padding = isMobile
+? { top: 8, right: 6, bottom: 24, left: 30 }
+: { top: 8, right: 8, bottom: 24, left: 36 };
+
+const chartWidth = Math.max(10, cssWidth - padding.left - padding.right);
+const chartHeight = Math.max(10, cssHeight - padding.top - padding.bottom);
+
+const allValues = [];
+for(const member of members){
+for(const v of series[member]) allValues.push(Number(v || 0));
+}
+
+const maxValueRaw = allValues.length ? Math.max(...allValues) : 0;
+const maxValue = maxValueRaw <= 0 ? 100 : Math.ceil(maxValueRaw / 50) * 50;
+const ySteps = 3;
+
+ctx.font = isMobile ? '8px Arial' : '9px Arial';
+ctx.lineWidth = 1;
+ctx.strokeStyle = '#d8dee5';
+ctx.fillStyle = '#64707d';
+
+for(let i = 0; i <= ySteps; i++){
+const value = (maxValue / ySteps) * i;
+const y = padding.top + chartHeight - (value / maxValue) * chartHeight;
+ctx.beginPath();
+ctx.moveTo(padding.left, y);
+ctx.lineTo(padding.left + chartWidth, y);
+ctx.stroke();
+ctx.textAlign = 'right';
+ctx.textBaseline = 'middle';
+ctx.fillText(formatYAxisLabel(value), padding.left - 3, y);
+}
+
+ctx.beginPath();
+ctx.strokeStyle = '#aab7c2';
+ctx.moveTo(padding.left, padding.top);
+ctx.lineTo(padding.left, padding.top + chartHeight);
+ctx.lineTo(padding.left + chartWidth, padding.top + chartHeight);
+ctx.stroke();
+
+const xCount = labels.length;
+const stepX = xCount > 1 ? chartWidth / (xCount - 1) : 0;
+
+ctx.strokeStyle = '#ecf1f5';
+for(let i = 0; i < xCount; i++){
+const x = xCount === 1 ? padding.left + chartWidth / 2 : padding.left + (stepX * i);
+ctx.beginPath();
+ctx.moveTo(x, padding.top);
+ctx.lineTo(x, padding.top + chartHeight);
+ctx.stroke();
+}
+
+ctx.fillStyle = '#64707d';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'top';
+for(let i = 0; i < xCount; i++){
+const x = xCount === 1 ? padding.left + chartWidth / 2 : padding.left + (stepX * i);
+ctx.fillText(labels[i], x, padding.top + chartHeight + 3);
+}
+
+for(let mIndex = 0; mIndex < members.length; mIndex++){
+const member = members[mIndex];
+const data = series[member];
+const color = getChartColor(mIndex);
+
+ctx.beginPath();
+ctx.lineWidth = isMobile ? 1.5 : 1.7;
+ctx.strokeStyle = color;
+
+data.forEach((value, i) => {
+const x = xCount === 1 ? padding.left + chartWidth / 2 : padding.left + (stepX * i);
+const y = padding.top + chartHeight - ((Number(value || 0) / maxValue) * chartHeight);
+if(i === 0) ctx.moveTo(x, y);
+else ctx.lineTo(x, y);
+});
+
+ctx.stroke();
+
+data.forEach((value, i) => {
+const x = xCount === 1 ? padding.left + chartWidth / 2 : padding.left + (stepX * i);
+const y = padding.top + chartHeight - ((Number(value || 0) / maxValue) * chartHeight);
+ctx.beginPath();
+ctx.fillStyle = color;
+ctx.arc(x, y, isMobile ? 2 : 2.5, 0, Math.PI * 2);
+ctx.fill();
+});
+}
+
+ctx.save();
+ctx.translate(isMobile ? 9 : 10, padding.top + chartHeight / 2);
+ctx.rotate(-Math.PI / 2);
+ctx.fillStyle = '#24323f';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.font = isMobile ? 'bold 8px Arial' : 'bold 9px Arial';
+ctx.fillText('Gasto (£)', 0, 0);
+ctx.restore();
+
+ctx.fillStyle = '#24323f';
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.font = isMobile ? 'bold 8px Arial' : 'bold 9px Arial';
+ctx.fillText(`Meses/${axisYear || 'aaaa'}`, padding.left + chartWidth / 2, cssHeight - 7);
+}
+
+function renderHistoryLegend(members){
+const box = document.getElementById('historyLegend');
+box.innerHTML = members.map((member, index) => `
+<div class="chart-legend-item">
+<span class="chart-legend-color" style="background:${getChartColor(index)}"></span>
+<span>${escapeHtml(member)}</span>
+</div>
+`).join('');
+}
+
+async function renderHistoryChart(){
+const canvas = document.getElementById('historyChart');
+const empty = document.getElementById('historyChartEmpty');
+const legend = document.getElementById('historyLegend');
+if(!canvas) return;
+
+const all = await getAllBudgets();
+const settings = await getSettings();
+const validBudgets = all.map(b => {
+currentBudget = currentBudget || b;
+ensureBudgetStructure(b, settings);
+return b;
+}).sort((a,b)=>a.id.localeCompare(b.id));
+
+if(validBudgets.length < 2){
+const ctx = canvas.getContext('2d');
+const dpr = window.devicePixelRatio || 1;
+const box = canvas.parentElement;
+const cssWidth = Math.max(box.clientWidth, 0);
+const cssHeight = box.clientHeight || 200;
+
+canvas.width = Math.floor(cssWidth * dpr);
+canvas.height = Math.floor(cssHeight * dpr);
+canvas.style.width = cssWidth + 'px';
+canvas.style.height = cssHeight + 'px';
+
+ctx.setTransform(1,0,0,1,0,0);
+ctx.scale(dpr, dpr);
+ctx.clearRect(0,0,cssWidth,cssHeight);
+
+legend.innerHTML = '';
+empty.classList.remove('hidden');
+empty.textContent = 'Guarde pelo menos 2 meses para visualizar a evolução dos gastos.';
+return;
+}
+
+const history = buildHistorySeries(validBudgets);
+
+if(!history.members.length){
+const ctx = canvas.getContext('2d');
+const dpr = window.devicePixelRatio || 1;
+const box = canvas.parentElement;
+const cssWidth = Math.max(box.clientWidth, 0);
+const cssHeight = box.clientHeight || 200;
+
+canvas.width = Math.floor(cssWidth * dpr);
+canvas.height = Math.floor(cssHeight * dpr);
+canvas.style.width = cssWidth + 'px';
+canvas.style.height = cssHeight + 'px';
+
+ctx.setTransform(1,0,0,1,0,0);
+ctx.scale(dpr, dpr);
+ctx.clearRect(0,0,cssWidth,cssHeight);
+
+legend.innerHTML = '';
+empty.classList.remove('hidden');
+empty.textContent = 'Ainda não há pessoas com valores lançados para montar o gráfico.';
+return;
+}
+
+empty.classList.add('hidden');
+empty.textContent = '';
+drawHistoryChart(canvas, history.labels, history.members, history.series, history.axisYear);
+renderHistoryLegend(history.members);
 }
 
 document.getElementById('btnOpenMonth').addEventListener('click', async ()=>{
-  const month = document.getElementById('budgetMonth').value;
+const month = document.getElementById('budgetMonth').value;
+if(!month){ alert('Escolha o mês de referência.'); return; }
 
-  if(!month){
-    alert('Escolha o mês de referência.');
-    return;
-  }
+const existing = await loadBudget(month);
+if(existing){
+const settings = await getSettings();
+currentBudget = existing;
+ensureBudgetStructure(existing, settings);
+alert('Este mês já foi lançado. O sistema vai abrir os dados guardados.');
+document.getElementById('budgetTitle').value = existing.title || monthLabel(existing.id);
+renderAll();
+return;
+}
 
-  const existing = await loadBudget(month);
+const title = monthLabel(month);
+await createBudgetIfNeeded(month, title);
 
-  if(existing){
-    const settings = await getSettings();
-    ensureBudgetStructure(existing, settings);
-    alert('Este mês já foi lançado. O sistema vai abrir os dados guardados.');
-    currentBudget = existing;
-    document.getElementById('budgetTitle').value = existing.title || monthLabel(existing.id);
-    renderAll();
-    return;
-  }
+if(currentBudget){
+currentBudget.expenses.forEach(e => {
+e.value = 0;
+e.launched = false;
+e.fixedAllocations = {};
+if(e.id === 'declared_expenses') e.declaredValues = normalizeDeclaredValues({}, getMembers());
+if(e.detailMode === 'category4'){
+const names = getCategoryNamesForExpense(e);
+e.categoryNames = names;
+e.details = names.map(name => ({ category:name, value:0 }));
+} else {
+e.details = [];
+}
+});
+syncAdjustmentsFromDeclared();
+await saveBudget();
+}
 
-  const title = monthLabel(month);
-  await createBudgetIfNeeded(month, title);
-
-  if(currentBudget){
-    currentBudget.expenses.forEach(e => {
-      e.value = 0;
-      e.launched = false;
-      e.fixedAllocations = {};
-      if(e.id === 'declared_expenses'){
-        e.declaredValues = normalizeDeclaredValues({}, getMembers());
-      }
-      if(e.detailMode === 'category4'){
-        e.details = (DETAIL_PRESETS[e.id] || []).map(name => ({ category:name, value:0 }));
-      } else {
-        e.details = [];
-      }
-    });
-    syncAdjustmentsFromDeclared();
-    await saveBudget();
-  }
-
-  alert('Novo mês criado. Pode começar os lançamentos.');
-  renderAll();
+alert('Novo mês criado. Pode começar os lançamentos.');
+renderAll();
 });
 
 document.getElementById('btnSave').addEventListener('click', async ()=>{
-  if(!currentBudget){
-    alert('Abra um mês primeiro.');
-    return;
-  }
-
-  currentBudget.title = document.getElementById('budgetTitle').value.trim() || monthLabel(currentBudget.id);
-  await saveBudget();
-  alert('Mês salvo.');
+if(!currentBudget){ alert('Abra um mês primeiro.'); return; }
+currentBudget.title = document.getElementById('budgetTitle').value.trim() || monthLabel(currentBudget.id);
+await saveBudget();
+alert('Mês salvo.');
 });
 
 document.getElementById('btnEditPeople').addEventListener('click', openPeopleEditor);
 
 document.getElementById('btnAddPerson').addEventListener('click', ()=>{
-  const input = document.getElementById('newPersonName');
-  const name = input.value.trim();
-  if(!name) return;
-  peopleDraft.push(name);
-  input.value = '';
-  renderPeopleEditor();
+const input = document.getElementById('newPersonName');
+const name = input.value.trim();
+if(!name) return;
+peopleDraft.push(name);
+input.value = '';
+renderPeopleEditor();
 });
 
 document.getElementById('btnSavePeople').addEventListener('click', savePeopleChanges);
 
 document.getElementById('btnLaunchExpense').addEventListener('click', openLaunchPanel);
 document.getElementById('btnLaunchExpense').addEventListener('touchend', (e)=>{
-  e.preventDefault();
-  openLaunchPanel();
+e.preventDefault();
+openLaunchPanel();
 }, {passive:false});
 
+document.getElementById('btnShowCustomExpensePanel').addEventListener('click', openCustomExpensePanel);
+document.getElementById('btnCancelCustomExpense').addEventListener('click', ()=>{
+document.getElementById('customExpensePanel').classList.add('hidden');
+});
+document.getElementById('customExpenseDetailMode').addEventListener('change', (e)=>{
+document.getElementById('customCategoryNamesBox').classList.toggle('hidden', e.target.value !== 'category4');
+});
+document.getElementById('btnCreateCustomExpense').addEventListener('click', createCustomExpense);
+
 document.getElementById('btnCancelExpense').addEventListener('click', ()=>{
-  activeExpenseId = null;
-  document.getElementById('editorPanel').classList.add('hidden');
-  setStatus('Lançamento cancelado.');
+activeExpenseId = null;
+document.getElementById('editorPanel').classList.add('hidden');
+setStatus('Lançamento cancelado.');
 });
 
 document.getElementById('btnApplyExpense').addEventListener('click', saveExpenseLaunch);
+document.getElementById('btnDeleteCustomExpense').addEventListener('click', deleteActiveCustomExpense);
 document.getElementById('btnPresetMembers').addEventListener('click', ()=>applyPresetToEditor('members'));
 document.getElementById('btnPresetZero').addEventListener('click', ()=>applyPresetToEditor('zero'));
 document.getElementById('btnAddDetail').addEventListener('click', addDetailToActive);
 document.getElementById('btnPrint').addEventListener('click', ()=>window.print());
 
 document.getElementById('btnDeleteMonth').addEventListener('click', async ()=>{
-  if(!currentBudget){
-    alert('Abra um mês primeiro.');
-    return;
-  }
+if(!currentBudget){ alert('Abra um mês primeiro.'); return; }
+if(!confirm('Deseja apagar este mês?')) return;
 
-  if(!confirm('Deseja apagar este mês?')) return;
-
-  await deleteBudget(currentBudget.id);
-  currentBudget = null;
-  activeExpenseId = null;
-  clearScreen();
-  renderAll();
-  await refreshSavedMonths();
+await deleteBudget(currentBudget.id);
+currentBudget = null;
+activeExpenseId = null;
+clearScreen();
+renderAll();
+await refreshSavedMonths();
+await renderHistoryChart();
 });
 
+window.addEventListener('resize', ()=>{ renderHistoryChart(); });
+
 (async function init(){
-  await initDB();
-  const now = new Date();
-  const month = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
-  document.getElementById('budgetMonth').value = month;
-  currentBudget = null;
-  clearScreen();
-  renderAll();
-  await refreshSavedMonths();
+await initDB();
+const now = new Date();
+const month = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+document.getElementById('budgetMonth').value = month;
+currentBudget = null;
+clearScreen();
+renderAll();
+await refreshSavedMonths();
+await renderHistoryChart();
 })();
 </script>
 </body>
