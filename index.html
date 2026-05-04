@@ -1153,6 +1153,10 @@ window.addEventListener('afterprint', ()=>{ const img = document.getElementById(
 (async function init(){
   await initDB(); const now = new Date(); const month = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`; document.getElementById('budgetMonth').value = month; currentBudget = null; clearScreen(); renderAll(); await refreshSavedMonths(); await renderHistoryChart();
 })();
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("service-worker.js");
+}
 </script>
 </body>
 </html>
