@@ -5,7 +5,7 @@
   <meta name="theme-color" content="#4f46e5">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Budgetly | Orçamento Familiar</title>
+  <title>Despesas Flat 5 | Orçamento Familiar</title>
 
   <style>
     :root {
@@ -84,7 +84,7 @@
     h1 {
       margin: 0;
       color: var(--accent);
-      font-size: 2rem;
+      font-size: 1.9rem;
       line-height: 1;
       font-weight: 850;
       letter-spacing: -0.045em;
@@ -246,20 +246,6 @@
       border-radius: 12px;
     }
 
-    .icon-btn {
-      width: 42px;
-      height: 42px;
-      min-width: 42px;
-      min-height: 42px;
-      padding: 0;
-      border-radius: 15px;
-      background: rgba(255, 255, 255, 0.88);
-      border: 1px solid var(--line);
-      color: var(--text);
-      box-shadow: var(--shadow-soft);
-      font-size: 1rem;
-    }
-
     .tiny {
       font-size: 0.74rem;
       color: var(--muted);
@@ -373,9 +359,14 @@
       color: var(--text);
     }
 
+    .app-action::before {
+      content: none !important;
+      display: none !important;
+    }
+
     .app-action .ico {
-      width: 29px;
-      height: 29px;
+      width: 30px;
+      height: 30px;
       display: grid;
       place-items: center;
       border-radius: 11px;
@@ -392,19 +383,8 @@
 
     #btnLaunchExpense,
     #btnShowCustomExpensePanel,
-    #btnPrint,
-    #btnDeleteMonth,
-    #btnSave,
-    #btnEditPeople {
-      min-height: 42px;
-    }
-
-    #btnSave::before {
-      content: "💾 ";
-    }
-
-    #btnEditPeople::before {
-      content: "👥 ";
+    #btnToggleDoneList {
+      min-height: 40px;
     }
 
     #btnLaunchExpense::before {
@@ -416,12 +396,8 @@
       content: "✎ ";
     }
 
-    #btnPrint::before {
-      content: "📄 ";
-    }
-
-    #btnDeleteMonth::before {
-      content: "🗑 ";
+    #btnToggleDoneList::before {
+      content: "▾ ";
     }
 
     .collapsible {
@@ -727,37 +703,40 @@
       width: 100%;
       border-collapse: collapse;
       table-layout: fixed;
-      font-size: 0.68rem;
+      font-size: 0.56rem;
     }
 
     th,
     td {
-      padding: 7px 5px;
+      padding: 5px 3px;
       border-bottom: 1px solid rgba(229, 231, 235, 0.78);
       text-align: right;
-      white-space: normal;
-      word-break: break-word;
-      overflow-wrap: anywhere;
-      vertical-align: top;
-      line-height: 1.2;
+      white-space: nowrap;
+      word-break: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      line-height: 1.15;
     }
 
     th:first-child,
     td:first-child {
       text-align: left;
-      width: 34%;
+      width: 32%;
+      white-space: normal;
+      overflow-wrap: break-word;
     }
 
     thead th {
       color: var(--muted);
       background: rgba(249, 250, 251, 0.92);
-      font-size: 0.62rem;
+      font-size: 0.54rem;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.02em;
     }
 
     .thead-main {
-      font-size: 0.68rem;
+      font-size: 0.58rem;
       color: var(--accent);
     }
 
@@ -774,15 +753,17 @@
     .detail-table {
       width: 100%;
       min-width: 0;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       table-layout: auto;
     }
 
     .detail-table th,
     .detail-table td {
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       padding: 7px 6px;
       white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
     }
 
     .report-head {
@@ -797,14 +778,14 @@
     #reportTitle {
       margin: 0;
       color: var(--accent) !important;
-      font-size: 1.35rem !important;
+      font-size: 1.2rem !important;
       line-height: 1.1;
       letter-spacing: -0.035em;
     }
 
     #reportMonthLabel {
       color: var(--muted);
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 650;
     }
 
@@ -932,6 +913,27 @@
       margin-top: 0;
     }
 
+    .done-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .done-header-row strong {
+      font-size: 13px;
+    }
+
+    #btnToggleDoneList {
+      width: auto;
+      min-width: 116px;
+      min-height: 34px;
+      font-size: 0.74rem;
+      border-radius: 12px;
+      padding: 0 10px;
+    }
+
     #doneList {
       margin-top: 8px !important;
     }
@@ -990,7 +992,7 @@
       }
 
       h1 {
-        font-size: 2.35rem;
+        font-size: 2.15rem;
       }
 
       .grid {
@@ -1008,17 +1010,21 @@
       }
 
       table {
-        font-size: 0.78rem;
+        font-size: 0.68rem;
       }
 
       th,
       td {
-        padding: 8px 8px;
-        line-height: 1.22;
+        padding: 6px 5px;
+        line-height: 1.18;
+      }
+
+      thead th {
+        font-size: 0.6rem;
       }
 
       .thead-main {
-        font-size: 0.78rem;
+        font-size: 0.64rem;
       }
 
       .pill {
@@ -1058,7 +1064,7 @@
       }
 
       h1 {
-        font-size: 1.75rem;
+        font-size: 1.62rem;
       }
 
       .card {
@@ -1095,6 +1101,23 @@
 
       .share-row {
         grid-template-columns: minmax(0, 1fr) 76px 18px;
+      }
+
+      table {
+        font-size: 0.5rem;
+      }
+
+      th,
+      td {
+        padding: 5px 2px;
+      }
+
+      thead th {
+        font-size: 0.48rem;
+      }
+
+      #reportTitle {
+        font-size: 1.12rem !important;
       }
     }
 
@@ -1180,7 +1203,7 @@
 
   <div class="top-header no-print">
     <div>
-      <h1>Budgetly</h1>
+      <h1>Despesas Flat 5</h1>
       <div class="sub">Orçamento familiar</div>
     </div>
   </div>
@@ -1380,9 +1403,15 @@
         </div>
       </div>
 
-      <div style="margin-top:14px">
-        <strong style="font-size:13px;">Já lançadas</strong>
-        <div id="doneList" class="done-list" style="margin-top:8px"></div>
+      <div class="done-header-row">
+        <strong>Já lançadas</strong>
+        <button class="secondary" type="button" id="btnToggleDoneList">Mostrar</button>
+      </div>
+
+      <div id="doneListPanel" class="collapsible hidden">
+        <div class="body">
+          <div id="doneList" class="done-list"></div>
+        </div>
       </div>
 
       <div class="footer-note">
@@ -1414,13 +1443,10 @@
         </div>
       </section>
 
-      <section class="card pdf-section">
-        <h2 class="section-title">Resumo</h2>
-        <div class="summary-grid" id="summaryPanels"></div>
-      </section>
+      <div id="summaryPanels" class="hidden"></div>
 
       <section class="card pdf-section">
-        <h2 class="section-title">Detalhes</h2>
+        <h2 class="section-title">Despesas com Detalhamento</h2>
         <div id="detailsPanels"></div>
       </section>
 
@@ -1453,9 +1479,9 @@
     Lançar
   </button>
 
-  <button type="button" onclick="document.getElementById('summaryPanels')?.scrollIntoView({behavior:'smooth',block:'start'})">
-    <strong>◔</strong>
-    Resumo
+  <button type="button" onclick="document.getElementById('detailsPanels')?.scrollIntoView({behavior:'smooth',block:'start'})">
+    <strong>☷</strong>
+    Detalhamento
   </button>
 
   <button type="button" onclick="document.getElementById('btnPrint')?.click()">
@@ -1701,13 +1727,16 @@ function clearScreen(){
   document.getElementById('detailsPanels').innerHTML = '';
   document.getElementById('doneList').innerHTML = '';
   document.getElementById('launchList').innerHTML = '';
-  document.getElementById('summaryPanels').innerHTML = '';
+  const summary = document.getElementById('summaryPanels');
+  if(summary) summary.innerHTML = '';
   document.getElementById('budgetTitle').value = '';
   document.getElementById('peoplePreview').innerHTML = '';
   document.getElementById('launchPanel').classList.add('hidden');
   document.getElementById('editorPanel').classList.add('hidden');
   document.getElementById('peoplePanel').classList.add('hidden');
   document.getElementById('customExpensePanel').classList.add('hidden');
+  document.getElementById('doneListPanel').classList.add('hidden');
+  document.getElementById('btnToggleDoneList').textContent = 'Mostrar';
   setStatus('');
 }
 async function refreshSavedMonths(){
@@ -1784,7 +1813,7 @@ function renderAll(){
   if(!currentBudget){ mainArea.classList.add('hidden'); clearScreen(); renderHistoryChart(); return; }
   syncAdjustmentsFromDeclared();
   mainArea.classList.remove('hidden');
-  renderHeader(); renderPeoplePreview(); renderLaunchList(); renderDoneList(); renderTable(); renderSummaryPanels(); renderDetailsPanels(); renderHistoryChart();
+  renderHeader(); renderPeoplePreview(); renderLaunchList(); renderDoneList(); renderTable(); renderDetailsPanels(); renderHistoryChart();
 }
 function renderHeader(){ document.getElementById('reportMonthLabel').textContent = currentBudget ? (currentBudget.title || monthLabel(currentBudget.id)) : 'Nenhum mês selecionado'; }
 function renderPeoplePreview(){ const box = document.getElementById('peoplePreview'); box.innerHTML = getMembers().map(m=>`<span class="person-chip">${escapeHtml(m)}</span>`).join(''); }
@@ -1940,13 +1969,27 @@ function renderExpenseDetailList(exp){
   box.innerHTML = `<div class="table-wrap" style="margin-top:8px; overflow-x:auto;"><table class="detail-table"><thead><tr><th>Data</th><th>Local</th><th>Valor</th></tr></thead><tbody>${exp.details.map(d=>`<tr><td>${dateToBR(d.date||'')}</td><td>${escapeHtml(d.place||'')}</td><td style="text-align:right">${money(d.value)}</td></tr>`).join('')}</tbody></table></div>`;
 }
 function renderDoneList(){
-  const box = document.getElementById('doneList'); if(!currentBudget){ box.innerHTML = '<div class="tiny">Abra um mês primeiro.</div>'; return; }
+  const box = document.getElementById('doneList'); 
+  if(!currentBudget){ box.innerHTML = '<div class="tiny">Abra um mês primeiro.</div>'; return; }
   const list = launchedExpenses();
+  const toggle = document.getElementById('btnToggleDoneList');
+  if(toggle) toggle.textContent = document.getElementById('doneListPanel').classList.contains('hidden') ? `Mostrar (${list.length})` : 'Ocultar';
   box.innerHTML = !list.length ? '<div class="tiny">Nenhuma despesa lançada ainda.</div>' : list.map(e => `
       <button type="button" class="expense-btn" onclick="editDoneExpense('${e.id}')"><span>${escapeHtml(e.name)}<br><span class="tiny">${money(e.value)}</span></span><span class="badge ok">Editar</span></button>
     `).join('');
 }
 window.editDoneExpense = function(id){ window.startExpense(id); };
+function toggleDoneList(){
+  const panel = document.getElementById('doneListPanel');
+  const btn = document.getElementById('btnToggleDoneList');
+  const isHidden = panel.classList.toggle('hidden');
+  const count = launchedExpenses().length;
+  btn.textContent = isHidden ? `Mostrar (${count})` : 'Ocultar';
+  if(!isHidden) {
+    renderDoneList();
+    panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+  }
+}
 function renderTable(){
   const head = document.getElementById('budgetHeadRow'); const body = document.getElementById('budgetBody'); const foot = document.getElementById('budgetFootRow'); const members = getMembers();
   head.innerHTML = `<th class="thead-main">Descrição</th>${members.map(m=>`<th>${escapeHtml(m)}</th>`).join('')}<th>Subtotal</th>`;
@@ -1993,7 +2036,8 @@ function renderSummaryTable(title, entries, valueFormatter = money){
 }
 function renderSummaryPanels(){
   const box = document.getElementById('summaryPanels');
-  if(!currentBudget){ box.innerHTML = '<div class="tiny">Abra um mês para ver os resumos.</div>'; return; }
+  if(!box) return;
+  if(!currentBudget){ box.innerHTML = ''; return; }
   const data = summarizeCurrentBudget();
   box.innerHTML = renderSummaryTable('Totais por categoria', data.categoryTotals);
 }
@@ -2177,7 +2221,7 @@ function buildExportData(budgets, settings){
 }
 async function exportJsonBackup(){
   const budgets = await getAllBudgets(); const settings = await getSettings(); const payload = buildExportData(budgets, settings); const text = JSON.stringify(payload, null, 2); const blob = new Blob([text], { type:'application/json' });
-  const url = URL.createObjectURL(blob); const a = document.createElement('a'); const stamp = new Date().toISOString().slice(0,10); a.href = url; a.download = `orcamento-flat5-backup-${stamp}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(blob); const a = document.createElement('a'); const stamp = new Date().toISOString().slice(0,10); a.href = url; a.download = `despesas-flat-5-backup-${stamp}.json`; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
 }
 async function importJsonBackup(file){
   const text = await file.text(); let data;
@@ -2218,6 +2262,7 @@ document.getElementById('btnSavePeople').addEventListener('click', savePeopleCha
 document.getElementById('btnLaunchExpense').addEventListener('click', openLaunchPanel);
 document.getElementById('btnLaunchExpense').addEventListener('touchend', (e)=>{ e.preventDefault(); openLaunchPanel(); }, {passive:false});
 document.getElementById('btnShowCustomExpensePanel').addEventListener('click', openCustomExpensePanel);
+document.getElementById('btnToggleDoneList').addEventListener('click', toggleDoneList);
 document.getElementById('btnCancelCustomExpense').addEventListener('click', ()=>{ document.getElementById('customExpensePanel').classList.add('hidden'); });
 document.getElementById('customExpenseDetailMode').addEventListener('change', (e)=>{ document.getElementById('customCategoryNamesBox').classList.toggle('hidden', e.target.value !== 'category4'); });
 document.getElementById('btnCreateCustomExpense').addEventListener('click', createCustomExpense);
